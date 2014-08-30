@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -29,7 +29,7 @@
 
 using std::ostringstream;
 
-Goto::Goto( const CodeGenArgs &args ) 
+Goto::Goto( const CodeGenArgs &args )
 :
 	CodeGen( args ),
 	actions(           "actions",             *this ),
@@ -91,7 +91,7 @@ void Goto::taActions()
 	actions.start();
 
 	actions.value( 0 );
-	
+
 	for ( GenActionTableMap::Iter act = redFsm->actionMap; act.lte(); act++ ) {
 		/* Write out the length, which will never be the last character. */
 		actions.value( act->key.length() );
@@ -119,8 +119,8 @@ void Goto::SINGLE_SWITCH( RedStateAp *state )
 
 	if ( numSingles == 1 ) {
 		/* If there is a single single key then write it out as an if. */
-		out << "\tif ( " << GET_KEY() << " == " << 
-				KEY(data[0].lowKey) << " ) {\n\t\t"; 
+		out << "\tif ( " << GET_KEY() << " == " <<
+				KEY(data[0].lowKey) << " ) {\n\t\t";
 
 		/* Virtual function for writing the target of the transition. */
 		TRANS_GOTO(data[0].value, 0) << "\n";
@@ -136,7 +136,7 @@ void Goto::SINGLE_SWITCH( RedStateAp *state )
 			TRANS_GOTO(data[j].value, 0) << "\n";
 			out << "\t}\n";
 		}
-		
+
 		/* Close off the transition switch. */
 		out << "\t}\n";
 	}
@@ -158,10 +158,10 @@ void Goto::RANGE_B_SEARCH( RedStateAp *state, int level, Key lower, Key upper, i
 
 	if ( anyLower && anyHigher ) {
 		/* Can go lower and higher than mid. */
-		out << TABS(level) << "if ( " << GET_KEY() << " < " << 
+		out << TABS(level) << "if ( " << GET_KEY() << " < " <<
 				KEY(data[mid].lowKey) << " ) {\n";
 		RANGE_B_SEARCH( state, level+1, lower, keyOps->sub( data[mid].lowKey, 1 ), low, mid-1 );
-		out << TABS(level) << "} else if ( " << GET_KEY() << " > " << 
+		out << TABS(level) << "} else if ( " << GET_KEY() << " > " <<
 				KEY(data[mid].highKey) << " ) {\n";
 		RANGE_B_SEARCH( state, level+1, keyOps->add( data[mid].highKey, 1 ), upper, mid+1, high );
 		out << TABS(level) << "} else {\n";
@@ -170,7 +170,7 @@ void Goto::RANGE_B_SEARCH( RedStateAp *state, int level, Key lower, Key upper, i
 	}
 	else if ( anyLower && !anyHigher ) {
 		/* Can go lower than mid but not higher. */
-		out << TABS(level) << "if ( " << GET_KEY() << " < " << 
+		out << TABS(level) << "if ( " << GET_KEY() << " < " <<
 				KEY(data[mid].lowKey) << " ) {\n";
 		RANGE_B_SEARCH( state, level+1, lower, keyOps->sub( data[mid].lowKey, 1 ), low, mid-1 );
 
@@ -182,7 +182,7 @@ void Goto::RANGE_B_SEARCH( RedStateAp *state, int level, Key lower, Key upper, i
 			out << TABS(level) << "}\n";
 		}
 		else {
-			out << TABS(level) << "} else if ( " << GET_KEY() << " <= " << 
+			out << TABS(level) << "} else if ( " << GET_KEY() << " <= " <<
 					KEY(data[mid].highKey) << " ) {\n";
 			TRANS_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
@@ -190,7 +190,7 @@ void Goto::RANGE_B_SEARCH( RedStateAp *state, int level, Key lower, Key upper, i
 	}
 	else if ( !anyLower && anyHigher ) {
 		/* Can go higher than mid but not lower. */
-		out << TABS(level) << "if ( " << GET_KEY() << " > " << 
+		out << TABS(level) << "if ( " << GET_KEY() << " > " <<
 				KEY(data[mid].highKey) << " ) {\n";
 		RANGE_B_SEARCH( state, level+1, keyOps->add( data[mid].highKey, 1 ), upper, mid+1, high );
 
@@ -202,7 +202,7 @@ void Goto::RANGE_B_SEARCH( RedStateAp *state, int level, Key lower, Key upper, i
 			out << TABS(level) << "}\n";
 		}
 		else {
-			out << TABS(level) << "} else if ( " << GET_KEY() << " >= " << 
+			out << TABS(level) << "} else if ( " << GET_KEY() << " >= " <<
 					KEY(data[mid].lowKey) << " ) {\n";
 			TRANS_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
@@ -212,20 +212,20 @@ void Goto::RANGE_B_SEARCH( RedStateAp *state, int level, Key lower, Key upper, i
 		/* Cannot go higher or lower than mid. It's mid or bust. What
 		 * tests to do depends on limits of alphabet. */
 		if ( !limitLow && !limitHigh ) {
-			out << TABS(level) << "if ( " << KEY(data[mid].lowKey) << " <= " << 
-					GET_KEY() << " && " << GET_KEY() << " <= " << 
+			out << TABS(level) << "if ( " << KEY(data[mid].lowKey) << " <= " <<
+					GET_KEY() << " && " << GET_KEY() << " <= " <<
 					KEY(data[mid].highKey) << " ) {\n";
 			TRANS_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
 		}
 		else if ( limitLow && !limitHigh ) {
-			out << TABS(level) << "if ( " << GET_KEY() << " <= " << 
+			out << TABS(level) << "if ( " << GET_KEY() << " <= " <<
 					KEY(data[mid].highKey) << " ) {\n";
 			TRANS_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
 		}
 		else if ( !limitLow && limitHigh ) {
-			out << TABS(level) << "if ( " << KEY(data[mid].lowKey) << " <= " << 
+			out << TABS(level) << "if ( " << KEY(data[mid].lowKey) << " <= " <<
 					GET_KEY() << " ) {\n";
 			TRANS_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
@@ -264,10 +264,10 @@ void Goto::COND_B_SEARCH( RedTransAp *trans, int level, CondKey lower, CondKey u
 
 	if ( anyLower && anyHigher ) {
 		/* Can go lower and higher than mid. */
-		out << TABS(level) << "if ( " << "ck" << " < " << 
+		out << TABS(level) << "if ( " << "ck" << " < " <<
 				CKEY(data[mid].key) << " ) {\n";
 		COND_B_SEARCH( trans, level+1, lower, data[mid].key-1, low, mid-1 );
-		out << TABS(level) << "} else if ( " << "ck" << " > " << 
+		out << TABS(level) << "} else if ( " << "ck" << " > " <<
 				CKEY(data[mid].key) << " ) {\n";
 		COND_B_SEARCH( trans, level+1, data[mid].key+1, upper, mid+1, high );
 		out << TABS(level) << "} else {\n";
@@ -276,7 +276,7 @@ void Goto::COND_B_SEARCH( RedTransAp *trans, int level, CondKey lower, CondKey u
 	}
 	else if ( anyLower && !anyHigher ) {
 		/* Can go lower than mid but not higher. */
-		out << TABS(level) << "if ( " << "ck" << " < " << 
+		out << TABS(level) << "if ( " << "ck" << " < " <<
 				CKEY(data[mid].key) << " ) {\n";
 		COND_B_SEARCH( trans, level+1, lower, data[mid].key-1, low, mid-1);
 
@@ -288,7 +288,7 @@ void Goto::COND_B_SEARCH( RedTransAp *trans, int level, CondKey lower, CondKey u
 			out << TABS(level) << "}\n";
 		}
 		else {
-			out << TABS(level) << "} else if ( " << "ck" << " <= " << 
+			out << TABS(level) << "} else if ( " << "ck" << " <= " <<
 					CKEY(data[mid].key) << " ) {\n";
 			COND_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
@@ -296,7 +296,7 @@ void Goto::COND_B_SEARCH( RedTransAp *trans, int level, CondKey lower, CondKey u
 	}
 	else if ( !anyLower && anyHigher ) {
 		/* Can go higher than mid but not lower. */
-		out << TABS(level) << "if ( " << "ck" << " > " << 
+		out << TABS(level) << "if ( " << "ck" << " > " <<
 				CKEY(data[mid].key) << " ) {\n";
 		COND_B_SEARCH( trans, level+1, data[mid].key+1, upper, mid+1, high );
 
@@ -308,7 +308,7 @@ void Goto::COND_B_SEARCH( RedTransAp *trans, int level, CondKey lower, CondKey u
 			out << TABS(level) << "}\n";
 		}
 		else {
-			out << TABS(level) << "} else if ( " << "ck" << " >= " << 
+			out << TABS(level) << "} else if ( " << "ck" << " >= " <<
 					CKEY(data[mid].key) << " ) {\n";
 			COND_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
@@ -318,19 +318,19 @@ void Goto::COND_B_SEARCH( RedTransAp *trans, int level, CondKey lower, CondKey u
 		/* Cannot go higher or lower than mid. It's mid or bust. What
 		 * tests to do depends on limits of alphabet. */
 		if ( !limitLow && !limitHigh ) {
-			out << TABS(level) << "if ( ck" << " == " << 
+			out << TABS(level) << "if ( ck" << " == " <<
 					CKEY(data[mid].key) << " ) {\n";
 			COND_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
 		}
 		else if ( limitLow && !limitHigh ) {
-			out << TABS(level) << "if ( " << "ck" << " <= " << 
+			out << TABS(level) << "if ( " << "ck" << " <= " <<
 					CKEY(data[mid].key) << " ) {\n";
 			COND_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
 		}
 		else if ( !limitLow && limitHigh ) {
-			out << TABS(level) << "if ( " << CKEY(data[mid].key) << " <= " << 
+			out << TABS(level) << "if ( " << CKEY(data[mid].key) << " <= " <<
 					"ck" << " )\n {";
 			COND_GOTO(data[mid].value, level+1) << "\n";
 			out << TABS(level) << "}\n";
@@ -535,7 +535,7 @@ void Goto::CALL( ostream &ret, int callDest, int targState, bool inFinish )
 	}
 
 	ret << STACK() << "[" << TOP() << "] = " << vCS() << "; " <<
-			TOP() << " += 1;" << vCS() << " = " << 
+			TOP() << " += 1;" << vCS() << " = " <<
 			callDest << "; " << "goto _again;}$";
 }
 
@@ -550,7 +550,7 @@ void Goto::NCALL( ostream &ret, int callDest, int targState, bool inFinish )
 	}
 
 	ret << STACK() << "[" << TOP() << "] = " << vCS() << "; " <<
-			TOP() << " += 1;" << vCS() << " = " << 
+			TOP() << " += 1;" << vCS() << " = " <<
 			callDest << "; }$";
 }
 

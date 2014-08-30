@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include <assert.h>
@@ -354,7 +354,7 @@ void FsmAp::doConcat( FsmAp *other, StateSet *fromStates, bool optional )
 	if ( !optional )
 		unsetAllFinStates();
 	finStateSet.insert( other->finStateSet );
-	
+
 	/* Since other's lists are empty, we can delete the fsm without
 	 * affecting any states. */
 	delete other;
@@ -469,7 +469,7 @@ void FsmAp::intersectOp( FsmAp *other )
 	/* Call worker Or routine. */
 	doOr( other );
 
-	/* Unset any final states that are no longer to 
+	/* Unset any final states that are no longer to
 	 * be final due to final bits. */
 	unsetIncompleteFinals();
 
@@ -496,7 +496,7 @@ void FsmAp::subtractOp( FsmAp *other )
 	/* Call worker Or routine. */
 	doOr( other );
 
-	/* Unset any final states that are no longer to 
+	/* Unset any final states that are no longer to
 	 * be final due to final bits. */
 	unsetKilledFinals();
 
@@ -540,7 +540,7 @@ void FsmAp::epsilonFillEptVectFrom( StateAp *root, StateAp *from, bool parentLea
 
 					/* If moving to a different graph or if any parent is
 					 * leaving then we are leaving. */
-					bool leaving = parentLeaving || 
+					bool leaving = parentLeaving ||
 							root->owningGraph != targ->owningGraph;
 
 					/* All ok, add the target epsilon and recurse. */
@@ -558,7 +558,7 @@ void FsmAp::shadowReadWriteStates( MergeData &md )
 	for ( StateList::Iter st = stateList; st.lte(); st++ )
 		st->isolatedShadow = 0;
 
-	/* Any states that may be both read from and written to must 
+	/* Any states that may be both read from and written to must
 	 * be shadowed. */
 	for ( StateList::Iter st = stateList; st.lte(); st++ ) {
 		/* Find such states by looping through stateVect lists, which give us
@@ -665,7 +665,7 @@ void FsmAp::joinOp( int startId, int finalId, FsmAp **others, int numOthers )
 	unsetStartState();
 	for ( int m = 0; m < numOthers; m++ )
 		others[m]->unsetStartState();
-	
+
 	/* Bring the other machines into this. */
 	for ( int m = 0; m < numOthers; m++ ) {
 		/* Bring in the rest of other's entry points. */
@@ -760,7 +760,7 @@ void FsmAp::globOp( FsmAp **others, int numOthers )
 	/* All other machines loose start states status. */
 	for ( int m = 0; m < numOthers; m++ )
 		others[m]->unsetStartState();
-	
+
 	/* Bring the other machines into this. */
 	for ( int m = 0; m < numOthers; m++ ) {
 		/* Bring in the rest of other's entry points. */
@@ -856,7 +856,7 @@ void FsmAp::unsetIncompleteFinals()
 	for ( int s = 0; s < fin.length(); s++ ) {
 		/* Check for one set but not the other. */
 		StateAp *state = fin.data[s];
-		if ( state->stateBits & STB_BOTH && 
+		if ( state->stateBits & STB_BOTH &&
 				(state->stateBits & STB_BOTH) != STB_BOTH )
 		{
 			/* One state wants the other but it is not there. */
@@ -928,7 +928,7 @@ void FsmAp::mergeStatesLeaving( MergeData &md, StateAp *destState, StateAp *srcS
 	}
 }
 
-void FsmAp::mergeStates( MergeData &md, StateAp *destState, 
+void FsmAp::mergeStates( MergeData &md, StateAp *destState,
 		StateAp **srcStates, int numSrc )
 {
 	for ( int s = 0; s < numSrc; s++ )
@@ -952,9 +952,9 @@ void FsmAp::mergeStates( MergeData &md, StateAp *destState, StateAp *srcState )
 		destState->epsilonTrans.append( EpsilonTrans( srcState->epsilonTrans ) );
 
 		/* Get all actions, duplicating to protect against write to source. */
-		destState->toStateActionTable.setActions( 
+		destState->toStateActionTable.setActions(
 				ActionTable( srcState->toStateActionTable ) );
-		destState->fromStateActionTable.setActions( 
+		destState->fromStateActionTable.setActions(
 				ActionTable( srcState->fromStateActionTable ) );
 		destState->outActionTable.setActions( ActionTable( srcState->outActionTable ) );
 		destState->outCondSet.insert( OutCondSet( srcState->outCondSet ) );

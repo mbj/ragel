@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include <iostream>
@@ -57,7 +57,7 @@ void Token::append( const Token &other )
 	length = newLength;
 }
 
-/* Perform minimization after an operation according 
+/* Perform minimization after an operation according
  * to the command line args. */
 void afterOpMinimize( FsmAp *fsm, bool lastInSeq )
 {
@@ -195,7 +195,7 @@ void makeFsmKeyArray( Key *result, char *data, int len, ParseData *pd )
 
 /* Like makeFsmKeyArray except the result has only unique keys. They ordering
  * will be changed. */
-void makeFsmUniqueKeyArray( KeySet &result, char *data, int len, 
+void makeFsmUniqueKeyArray( KeySet &result, char *data, int len,
 		bool caseInsensitive, ParseData *pd )
 {
 	/* Use a transitions list for getting unique keys. */
@@ -344,7 +344,7 @@ FsmAp *makeBuiltin( BuiltinMachine builtin, ParseData *pd )
 		/* Punctuation. */
 		FsmAp *range1 = new FsmAp( pd->fsmCtx );
 		FsmAp *range2 = new FsmAp( pd->fsmCtx );
-		FsmAp *range3 = new FsmAp( pd->fsmCtx ); 
+		FsmAp *range3 = new FsmAp( pd->fsmCtx );
 		FsmAp *range4 = new FsmAp( pd->fsmCtx );
 		range1->rangeFsm( '!', '/' );
 		range2->rangeFsm( ':', '@' );
@@ -417,10 +417,10 @@ bool NameInst::anyRefsRec()
 
 /* Initialize the structure that will collect info during the parse of a
  * machine. */
-ParseData::ParseData( InputData *id, std::string fileName, string sectionName, 
+ParseData::ParseData( InputData *id, std::string fileName, string sectionName,
 		const InputLoc &sectionLoc, const HostLang *hostLang,
 		MinimizeLevel minimizeLevel, MinimizeOpt minimizeOpt )
-:	
+:
 	sectionGraph(0),
 	generatingSectionSubset(false),
 	nextPriorKey(0),
@@ -593,12 +593,12 @@ NameSet ParseData::resolvePart( NameInst *refFrom, const std::string &data, bool
 	return result;
 }
 
-void ParseData::resolveFrom( NameSet &result, NameInst *refFrom, 
+void ParseData::resolveFrom( NameSet &result, NameInst *refFrom,
 		NameRef *nameRef, int namePos )
 {
 	/* Look for the name in the owning scope of the factor with aug. */
 	NameSet partResult = resolvePart( refFrom, nameRef->data[namePos], false );
-	
+
 	/* If there are more parts to the name then continue on. */
 	if ( ++namePos < nameRef->length() ) {
 		/* There are more components to the name, search using all the part
@@ -644,7 +644,7 @@ ostream &operator<<( ostream &out, const NameInst &nameInst )
 		parents[p] = curParent;
 		curParent = curParent->parent;
 	}
-		
+
 	/* Write the parents out, skip the root. */
 	for ( int p = 1; p < numParents; p++ )
 		out << "::" << ( !parents[p]->name.empty() ? parents[p]->name : "<ANON>" );
@@ -699,7 +699,7 @@ NameInst *ParseData::resolveStateRef( NameRef *nameRef, InputLoc &loc, Action *a
 				nameInst = resolved[0];
 				if ( resolved.length() > 1 ) {
 					/* Complain about the multiple references. */
-					error(loc) << "state reference " << nameRef << 
+					error(loc) << "state reference " << nameRef <<
 							" resolves to multiple entry points" << endl;
 					errorStateLabels( resolved );
 				}
@@ -718,7 +718,7 @@ NameInst *ParseData::resolveStateRef( NameRef *nameRef, InputLoc &loc, Action *a
 			nameInst = resolved[0];
 			if ( resolved.length() > 1 ) {
 				/* Complain about the multiple references. */
-				error(loc) << "state reference " << nameRef << 
+				error(loc) << "state reference " << nameRef <<
 						" resolves to multiple entry points" << endl;
 				errorStateLabels( resolved );
 			}
@@ -821,7 +821,7 @@ void ParseData::makeNameTree( GraphDictEl *dictEl )
 			glel->value->makeNameTree( glel->loc, this );
 		}
 	}
-	
+
 	/* The number of nodes in the tree can now be given by nextNameId */
 	nameIndex = new NameInst*[nextNameId];
 	memset( nameIndex, 0, sizeof(NameInst*)*nextNameId );
@@ -929,8 +929,8 @@ void ParseData::printNameInst( NameInst *nameInst, int level )
 {
 	for ( int i = 0; i < level; i++ )
 		cerr << "  ";
-	cerr << (!nameInst->name.empty() ? nameInst->name : "<ANON>") << 
-			"  id: " << nameInst->id << 
+	cerr << (!nameInst->name.empty() ? nameInst->name : "<ANON>") <<
+			"  id: " << nameInst->id <<
 			"  refs: " << nameInst->numRefs <<
 			"  uses: " << nameInst->numUses << endl;
 	for ( NameVect::Iter name = nameInst->childVect; name.lte(); name++ )
@@ -940,7 +940,7 @@ void ParseData::printNameInst( NameInst *nameInst, int level )
 /* Remove duplicates of unique actions from an action table. */
 void ParseData::removeDups( ActionTable &table )
 {
-	/* Scan through the table looking for unique actions to 
+	/* Scan through the table looking for unique actions to
 	 * remove duplicates of. */
 	for ( int i = 0; i < table.length(); i++ ) {
 		/* Remove any duplicates ahead of i. */
@@ -1082,7 +1082,7 @@ FsmAp *ParseData::makeInstance( GraphDictEl *gdNode )
 	/* Transfer global error actions. */
 	for ( StateList::Iter state = graph->stateList; state.lte(); state++ )
 		graph->transferErrorActions( state, 0 );
-	
+
 	if ( id->wantDupsRemoved )
 		removeActionDups( graph );
 
@@ -1128,7 +1128,7 @@ void ParseData::printNameTree()
 	/* Print the name instance map. */
 	for ( NameVect::Iter name = rootName->childVect; name.lte(); name++ )
 		printNameInst( *name, 0 );
-	
+
 	cerr << "name index:" << endl;
 	/* Show that the name index is correct. */
 	for ( int ni = 0; ni < nextNameId; ni++ ) {
@@ -1230,7 +1230,7 @@ void ParseData::analyzeAction( Action *action, InlineList *inlineList )
 			}
 		}
 
-		if ( item->type == InlineItem::LmOnLast || 
+		if ( item->type == InlineItem::LmOnLast ||
 				item->type == InlineItem::LmOnNext ||
 				item->type == InlineItem::LmOnLagBehind )
 		{
@@ -1301,7 +1301,7 @@ void ParseData::analyzeGraph( FsmAp *graph )
 					(*sci)->numCondRefs += 1;
 			}
 
-			for ( CondList::Iter cond = trans->condList; cond.lte(); cond++ ) { 
+			for ( CondList::Iter cond = trans->condList; cond.lte(); cond++ ) {
 				for ( ActionTable::Iter at = cond->actionTable; at.lte(); at++ )
 					at->value->numTransRefs += 1;
 			}
@@ -1381,7 +1381,7 @@ void ParseData::prepareMachineGen( GraphDictEl *graphDictEl, const HostLang *hos
 		sectionGraph = makeAll();
 	else
 		sectionGraph = makeSpecific( graphDictEl );
-	
+
 	/* Compute exports from the export definitions. */
 	makeExports();
 

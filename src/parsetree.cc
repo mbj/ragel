@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include <iostream>
@@ -38,7 +38,7 @@ ostream &operator<<( ostream &out, const NameInst &nameInst );
  * characters with escapes and options interpreted. Also null terminates the
  * string. Though this null termination should not be relied on for
  * interpreting literals in the parser because the string may contain \0 */
-char *prepareLitString( const InputLoc &loc, const char *data, long length, 
+char *prepareLitString( const InputLoc &loc, const char *data, long length,
 		long &resLen, bool &caseInsensitive )
 {
 	char *resData = new char[length+1];
@@ -51,7 +51,7 @@ char *prepareLitString( const InputLoc &loc, const char *data, long length,
 		if ( *end == 'i' )
 			caseInsensitive = true;
 		else {
-			error( loc ) << "literal string '" << *end << 
+			error( loc ) << "literal string '" << *end <<
 					"' option not supported" << endl;
 		}
 		end -= 1;
@@ -92,7 +92,7 @@ FsmAp *VarDef::walk( ParseData *pd )
 
 	/* Recurse on the expression. */
 	FsmAp *rtnVal = machineDef->walk( pd );
-	
+
 	/* Do the tranfer of local error actions. */
 	LocalErrDictEl *localErrDictEl = pd->localErrDict.find( name );
 	if ( localErrDictEl != 0 ) {
@@ -142,13 +142,13 @@ void VarDef::resolveNameRefs( ParseData *pd )
 
 	/* Recurse. */
 	machineDef->resolveNameRefs( pd );
-	
+
 	/* The name scope ends, pop the name instantiation. */
 	pd->popNameScope( nameFrame );
 }
 
 InputLoc LongestMatchPart::getLoc()
-{ 
+{
 	return action != 0 ? action->loc : semiLoc;
 }
 
@@ -162,7 +162,7 @@ InputLoc LongestMatchPart::getLoc()
  *  4. start state of all longest match routines.
  */
 
-Action *LongestMatch::newAction( ParseData *pd, const InputLoc &loc, 
+Action *LongestMatch::newAction( ParseData *pd, const InputLoc &loc,
 		const char *name, InlineList *inlineList )
 {
 	Action *action = new Action( loc, name, inlineList, pd->nextCondId++ );
@@ -179,7 +179,7 @@ void LongestMatch::makeActions( ParseData *pd )
 		/* For each part create actions for setting the match type.  We need
 		 * to do this so that the actions will go into the actionIndex. */
 		InlineList *inlineList = new InlineList;
-		inlineList->append( new InlineItem( lmi->getLoc(), this, lmi, 
+		inlineList->append( new InlineItem( lmi->getLoc(), this, lmi,
 				InlineItem::LmSetActId ) );
 		char *actName = new char[50];
 		sprintf( actName, "store%i", lmi->longestMatchId );
@@ -192,7 +192,7 @@ void LongestMatch::makeActions( ParseData *pd )
 		/* For each part create actions for setting the match type.  We need
 		 * to do this so that the actions will go into the actionIndex. */
 		InlineList *inlineList = new InlineList;
-		inlineList->append( new InlineItem( lmi->getLoc(), this, lmi, 
+		inlineList->append( new InlineItem( lmi->getLoc(), this, lmi,
 				InlineItem::LmOnLast ) );
 		char *actName = new char[50];
 		sprintf( actName, "last%i", lmi->longestMatchId );
@@ -206,7 +206,7 @@ void LongestMatch::makeActions( ParseData *pd )
 		/* For each part create actions for setting the match type.  We need
 		 * to do this so that the actions will go into the actionIndex. */
 		InlineList *inlineList = new InlineList;
-		inlineList->append( new InlineItem( lmi->getLoc(), this, lmi, 
+		inlineList->append( new InlineItem( lmi->getLoc(), this, lmi,
 				InlineItem::LmOnNext ) );
 		char *actName = new char[50];
 		sprintf( actName, "next%i", lmi->longestMatchId );
@@ -219,7 +219,7 @@ void LongestMatch::makeActions( ParseData *pd )
 		/* For each part create actions for setting the match type.  We need
 		 * to do this so that the actions will go into the actionIndex. */
 		InlineList *inlineList = new InlineList;
-		inlineList->append( new InlineItem( lmi->getLoc(), this, lmi, 
+		inlineList->append( new InlineItem( lmi->getLoc(), this, lmi,
 				InlineItem::LmOnLagBehind ) );
 		char *actName = new char[50];
 		sprintf( actName, "lag%i", lmi->longestMatchId );
@@ -392,7 +392,7 @@ void LongestMatch::runLongestMatch( ParseData *pd, FsmAp *graph )
 					 * actions then it will fail because the out action will
 					 * have been transferred to an error transition, which
 					 * makes the outlist non-empty. */
-					trans->condList.head->actionTable.setAction( lmAct->key, 
+					trans->condList.head->actionTable.setAction( lmAct->key,
 							lmAct->value->actOnLast );
 					restartTrans.append( trans );
 				}
@@ -427,7 +427,7 @@ void LongestMatch::runLongestMatch( ParseData *pd, FsmAp *graph )
 					 * execute, must set it. */
 					if ( maxItemSetLength > 1 ) {
 						/* There are transitions out, another match may come. */
-						trans->condList.head->actionTable.setAction( lmAct->key, 
+						trans->condList.head->actionTable.setAction( lmAct->key,
 								lmAct->value->setActId );
 					}
 				}
@@ -448,16 +448,16 @@ void LongestMatch::runLongestMatch( ParseData *pd, FsmAp *graph )
 			if ( st->isFinState() ) {
 				/* On error execute the onActNext action, which knows that
 				 * the last character of the token was one back and restart. */
-				graph->setErrorTarget( st, graph->startState, &lmErrActionOrd, 
+				graph->setErrorTarget( st, graph->startState, &lmErrActionOrd,
 						&st->lmItemSet[0]->actOnNext, 1 );
-				st->eofActionTable.setAction( lmErrActionOrd, 
+				st->eofActionTable.setAction( lmErrActionOrd,
 						st->lmItemSet[0]->actOnNext );
 				st->eofTarget = graph->startState;
 			}
 			else {
-				graph->setErrorTarget( st, graph->startState, &lmErrActionOrd, 
+				graph->setErrorTarget( st, graph->startState, &lmErrActionOrd,
 						&st->lmItemSet[0]->actLagBehind, 1 );
-				st->eofActionTable.setAction( lmErrActionOrd, 
+				st->eofActionTable.setAction( lmErrActionOrd,
 						st->lmItemSet[0]->actLagBehind );
 				st->eofTarget = graph->startState;
 			}
@@ -470,13 +470,13 @@ void LongestMatch::runLongestMatch( ParseData *pd, FsmAp *graph )
 					(*plmi)->inLmSelect = true;
 			}
 			/* On error, execute the action select and go to the start state. */
-			graph->setErrorTarget( st, graph->startState, &lmErrActionOrd, 
+			graph->setErrorTarget( st, graph->startState, &lmErrActionOrd,
 					&lmActSelect, 1 );
 			st->eofActionTable.setAction( lmErrActionOrd, lmActSelect );
 			st->eofTarget = graph->startState;
 		}
 	}
-	
+
 	/* Finally, the start state should be made final. */
 	graph->setFinState( graph->startState );
 }
@@ -496,7 +496,7 @@ FsmAp *LongestMatch::walk( ParseData *pd )
 
 	/* Make each part of the longest match. */
 	FsmAp **parts = new FsmAp*[longestMatchList->length()];
-	LmPartList::Iter lmi = *longestMatchList; 
+	LmPartList::Iter lmi = *longestMatchList;
 	for ( int i = 0; lmi.lte(); lmi++, i++ ) {
 		/* Create the machine and embed the setting of the longest match id. */
 		parts[i] = lmi->join->walk( pd );
@@ -609,8 +609,8 @@ FsmAp *Join::walkJoin( ParseData *pd )
 	ExprList::Iter expr = exprList;
 	for ( int e = 0; e < exprList.length(); e++, expr++ )
 		fsms[e] = expr->walk( pd );
-	
-	/* Get the start and final names. Final is 
+
+	/* Get the start and final names. Final is
 	 * guaranteed to exist, start is not. */
 	NameInst *startName = pd->curNameInst->start;
 	NameInst *finalName = pd->curNameInst->final;
@@ -650,7 +650,7 @@ void Join::makeNameTree( ParseData *pd )
 		pd->curNameInst = pd->addNameInst( loc, std::string(), false );
 
 		/* Join scopes need an implicit "final" target. */
-		pd->curNameInst->final = new NameInst( InputLoc(), pd->curNameInst, "final", 
+		pd->curNameInst->final = new NameInst( InputLoc(), pd->curNameInst, "final",
 				pd->nextNameId++, false );
 
 		/* Recurse into all expressions in the list. */
@@ -908,7 +908,7 @@ FsmAp *Term::walk( ParseData *pd, bool lastInSeq )
 			 * against the left machine persisting by moving through the empty
 			 * string. */
 			if ( rhs->startState->isFinState() ) {
-				rhs->startState->outPriorTable.setPrior( 
+				rhs->startState->outPriorTable.setPrior(
 						pd->curPriorOrd++, &priorDescs[1] );
 			}
 
@@ -1128,7 +1128,7 @@ void FactorWithAug::assignActions( ParseData *pd, FsmAp *graph, int *actionOrd )
 			break;
 
 		/* Remaining cases, prevented by the parser. */
-		default: 
+		default:
 			assert( false );
 			break;
 		}
@@ -1195,11 +1195,11 @@ FsmAp *FactorWithAug::walk( ParseData *pd )
 	int *actionOrd = 0;
 	if ( actions.length() > 0 )
 		actionOrd = new int[actions.length()];
-	
+
 	/* First walk the list of actions, assigning order to all starting
 	 * actions. */
 	for ( int i = 0; i < actions.length(); i++ ) {
-		if ( actions[i].type == at_start || 
+		if ( actions[i].type == at_start ||
 				actions[i].type == at_start_gbl_error ||
 				actions[i].type == at_start_local_error ||
 				actions[i].type == at_start_to_state ||
@@ -1213,7 +1213,7 @@ FsmAp *FactorWithAug::walk( ParseData *pd )
 
 	/* Compute the remaining action orderings. */
 	for ( int i = 0; i < actions.length(); i++ ) {
-		if ( actions[i].type != at_start && 
+		if ( actions[i].type != at_start &&
 				actions[i].type != at_start_gbl_error &&
 				actions[i].type != at_start_local_error &&
 				actions[i].type != at_start_to_state &&
@@ -1233,7 +1233,7 @@ FsmAp *FactorWithAug::walk( ParseData *pd )
 	int *priorOrd = 0;
 	if ( priorityAugs.length() > 0 )
 		priorOrd = new int[priorityAugs.length()];
-	
+
 	/* Walk all priorities, assigning the priority ordering. */
 	for ( int i = 0; i < priorityAugs.length(); i++ )
 		priorOrd[i] = pd->curPriorOrd++;
@@ -1290,7 +1290,7 @@ FsmAp *FactorWithAug::walk( ParseData *pd )
 	if ( priorOrd != 0 )
 		delete[] priorOrd;
 	if ( actionOrd != 0 )
-		delete[] actionOrd;	
+		delete[] actionOrd;
 	return rtnVal;
 }
 
@@ -1314,7 +1314,7 @@ void FactorWithAug::resolveNameRefs( ParseData *pd )
 	NameFrame nameFrame = pd->enterNameScope( false, labels.length() );
 
 	/* Note action references. */
-	for ( int i = 0; i < actions.length(); i++ ) 
+	for ( int i = 0; i < actions.length(); i++ )
 		actions[i].action->actionRefs.append( pd->localNameScope );
 
 	/* Recurse first. IMPORTANT: we must do the exact same traversal as when
@@ -1341,7 +1341,7 @@ void FactorWithAug::resolveNameRefs( ParseData *pd )
 				resolvedName = resolved[0];
 				if ( resolved.length() > 1 ) {
 					/* Complain about the multiple references. */
-					error(link.loc) << "state reference " << link.target << 
+					error(link.loc) << "state reference " << link.target <<
 							" resolves to multiple entry points" << endl;
 					errorStateLabels( resolved );
 				}
@@ -1469,7 +1469,7 @@ FsmAp *FactorWithRep::walk( ParseData *pd )
 	case ExactType: {
 		/* Get an int from the repetition amount. */
 		if ( lowerRep == 0 ) {
-			/* No copies. Don't need to evaluate the factorWithRep. 
+			/* No copies. Don't need to evaluate the factorWithRep.
 			 * This Defeats the purpose so give a warning. */
 			warning(loc) << "exactly zero repetitions results "
 					"in the null machine" << endl;
@@ -1498,7 +1498,7 @@ FsmAp *FactorWithRep::walk( ParseData *pd )
 	case MaxType: {
 		/* Get an int from the repetition amount. */
 		if ( upperRep == 0 ) {
-			/* No copies. Don't need to evaluate the factorWithRep. 
+			/* No copies. Don't need to evaluate the factorWithRep.
 			 * This Defeats the purpose so give a warning. */
 			warning(loc) << "max zero repetitions results "
 					"in the null machine" << endl;
@@ -1514,7 +1514,7 @@ FsmAp *FactorWithRep::walk( ParseData *pd )
 						"accepts zero length word" << endl;
 			}
 
-			/* The start func orders need to be shifted before doing the 
+			/* The start func orders need to be shifted before doing the
 			 * repetition. */
 			pd->curActionOrd += retFsm->shiftStartActionOrder( pd->curActionOrd );
 
@@ -1535,7 +1535,7 @@ FsmAp *FactorWithRep::walk( ParseData *pd )
 		/* The start func orders need to be shifted before doing the repetition
 		 * and the kleene star. */
 		pd->curActionOrd += retFsm->shiftStartActionOrder( pd->curActionOrd );
-	
+
 		if ( lowerRep == 0 ) {
 			/* Acts just like a star op on the machine to return. */
 			retFsm->starOp( );
@@ -1850,14 +1850,14 @@ FsmAp *Range::walk( ParseData *pd )
 	/* Construct and verify the suitability of the lower end of the range. */
 	FsmAp *lowerFsm = lowerLit->walk( pd );
 	if ( !lowerFsm->checkSingleCharMachine() ) {
-		error(lowerLit->token.loc) << 
+		error(lowerLit->token.loc) <<
 			"bad range lower end, must be a single character" << endl;
 	}
 
 	/* Construct and verify the upper end. */
 	FsmAp *upperFsm = upperLit->walk( pd );
 	if ( !upperFsm->checkSingleCharMachine() ) {
-		error(upperLit->token.loc) << 
+		error(upperLit->token.loc) <<
 			"bad range upper end, must be a single character" << endl;
 	}
 
@@ -1899,7 +1899,7 @@ FsmAp *Literal::walk( ParseData *pd )
 		/* Make the array of keys in int format. */
 		long length;
 		bool caseInsensitive;
-		char *data = prepareLitString( token.loc, token.data, token.length, 
+		char *data = prepareLitString( token.loc, token.data, token.length,
 				length, caseInsensitive );
 		Key *arr = new Key[length];
 		makeFsmKeyArray( arr, data, length, pd );
@@ -2087,7 +2087,7 @@ FsmAp *ReOrItem::walk( ParseData *pd, RegExpr *rootRegex )
 		 * issue warning or an error but since we can't with [a0-9a] or 'a' |
 		 * 'a' don't bother here. */
 		KeySet keySet( keyOps );
-		makeFsmUniqueKeyArray( keySet, token.data, token.length, 
+		makeFsmUniqueKeyArray( keySet, token.data, token.length,
 			rootRegex != 0 ? rootRegex->caseInsensitive : false, pd );
 
 		/* Run the or operator. */

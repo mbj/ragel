@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include <stdlib.h>
@@ -112,7 +112,7 @@ void usage()
 "   -G0                  Switch-driven\n"
 "   -G1                  Switch-driven with expanded actions\n"
 "   -G2                  Goto-driven with expanded actions\n"
-	;	
+	;
 
 	exit(0);
 }
@@ -353,7 +353,7 @@ void InputData::parseArgs( int argc, const char **argv )
 				else if ( strcmp( arg, "rbx" ) == 0 )
 					rubyImpl = Rubinius;
 				else {
-					error() << "--" << pc.paramArg << 
+					error() << "--" << pc.paramArg <<
 							" is an invalid argument" << endl;
 				}
 				free( arg );
@@ -361,18 +361,18 @@ void InputData::parseArgs( int argc, const char **argv )
 			}
 
 			/* Passthrough args. */
-			case 'B': 
+			case 'B':
 				if ( pc.paramArg[0] == '0' )
 					codeStyle = GenBasic;
 				else {
-					error() << "-B" << pc.paramArg[0] << 
+					error() << "-B" << pc.paramArg[0] <<
 							" is an invalid argument" << endl;
 					exit(1);
 				}
 				break;
 
 			/* Passthrough args. */
-			case 'T': 
+			case 'T':
 				if ( pc.paramArg[0] == '0' )
 					codeStyle = GenTables;
 				else if ( pc.paramArg[0] == '1' )
@@ -380,23 +380,23 @@ void InputData::parseArgs( int argc, const char **argv )
 				else if ( pc.paramArg[0] == '2' )
 					codeStyle = GenBasic;
 				else {
-					error() << "-T" << pc.paramArg[0] << 
+					error() << "-T" << pc.paramArg[0] <<
 							" is an invalid argument" << endl;
 					exit(1);
 				}
 				break;
-			case 'F': 
+			case 'F':
 				if ( pc.paramArg[0] == '0' )
 					codeStyle = GenFlat;
 				else if ( pc.paramArg[0] == '1' )
 					codeStyle = GenFFlat;
 				else {
-					error() << "-F" << pc.paramArg[0] << 
+					error() << "-F" << pc.paramArg[0] <<
 							" is an invalid argument" << endl;
 					exit(1);
 				}
 				break;
-			case 'G': 
+			case 'G':
 				if ( pc.paramArg[0] == '0' )
 					codeStyle = GenGoto;
 				else if ( pc.paramArg[0] == '1' )
@@ -407,7 +407,7 @@ void InputData::parseArgs( int argc, const char **argv )
 					codeStyle = GenIpGoto;
 					maxTransitions = 32;
 				} else {
-					error() << "-G" << pc.paramArg[0] << 
+					error() << "-G" << pc.paramArg[0] <<
 							" is an invalid argument" << endl;
 					exit(1);
 				}
@@ -454,10 +454,10 @@ void InputData::checkArgs()
 		exit(1);
 
 	/* Make sure we are not writing to the same file as the input file. */
-	if ( inputFileName != 0 && outputFileName != 0 && 
+	if ( inputFileName != 0 && outputFileName != 0 &&
 			strcmp( inputFileName, outputFileName  ) == 0 )
 	{
-		error() << "output file \"" << outputFileName  << 
+		error() << "output file \"" << outputFileName  <<
 				"\" is the same as the input file" << endp;
 	}
 }

@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "fsmgraph.h"
@@ -185,13 +185,13 @@ int ApproxCompare::compare( const StateAp *state1, const StateAp *state2 )
 		return -1;
 	else if ( !(state1->stateBits & STB_ISFINAL) && (state2->stateBits & STB_ISFINAL) )
 		return 1;
-	
+
 	/* Test epsilon transition sets. */
-	compareRes = CmpEpsilonTrans::compare( state1->epsilonTrans, 
+	compareRes = CmpEpsilonTrans::compare( state1->epsilonTrans,
 			state2->epsilonTrans );
 	if ( compareRes != 0 )
 		return compareRes;
-	
+
 	/* Compare the out transitions. */
 	compareRes = FsmAp::compareStateData( state1, state2 );
 	if ( compareRes != 0 )
@@ -215,7 +215,7 @@ int ApproxCompare::compare( const StateAp *state1, const StateAp *state2 )
 			break;
 
 		case RangePairIter<TransAp>::RangeOverlap:
-			compareRes = FsmAp::compareFullPtr( 
+			compareRes = FsmAp::compareFullPtr(
 					outPair.s1Tel.trans, outPair.s2Tel.trans );
 			if ( compareRes != 0 )
 				return compareRes;
@@ -249,7 +249,7 @@ int InitPartitionCompare::compare( const StateAp *state1 , const StateAp *state2
 		return 1;
 
 	/* Test epsilon transition sets. */
-	compareRes = CmpEpsilonTrans::compare( state1->epsilonTrans, 
+	compareRes = CmpEpsilonTrans::compare( state1->epsilonTrans,
 			state2->epsilonTrans );
 	if ( compareRes != 0 )
 		return compareRes;
@@ -277,7 +277,7 @@ int InitPartitionCompare::compare( const StateAp *state1 , const StateAp *state2
 			break;
 
 		case RangePairIter<TransAp>::RangeOverlap:
-			compareRes = FsmAp::compareTransDataPtr( 
+			compareRes = FsmAp::compareTransDataPtr(
 					outPair.s1Tel.trans, outPair.s2Tel.trans );
 			if ( compareRes != 0 )
 				return compareRes;
@@ -315,7 +315,7 @@ int PartitionCompare::compare( const StateAp *state1, const StateAp *state2 )
 			break;
 
 		case RangePairIter<TransAp>::RangeOverlap:
-			compareRes = FsmAp::compareTransPartPtr( 
+			compareRes = FsmAp::compareTransPartPtr(
 					outPair.s1Tel.trans, outPair.s2Tel.trans );
 			if ( compareRes != 0 )
 				return compareRes;
@@ -334,7 +334,7 @@ int PartitionCompare::compare( const StateAp *state1, const StateAp *state2 )
 		return 1;
 	else if ( state1->eofTarget != 0 ) {
 		/* Both eof targets are set. */
-		compareRes = CmpOrd< MinPartition* >::compare( 
+		compareRes = CmpOrd< MinPartition* >::compare(
 			state1->eofTarget->alg.partition, state2->eofTarget->alg.partition );
 		if ( compareRes != 0 )
 			return compareRes;
@@ -344,7 +344,7 @@ int PartitionCompare::compare( const StateAp *state1, const StateAp *state2 )
 }
 
 /* Compare class for the sort that does the partitioning. */
-bool MarkCompare::shouldMark( MarkIndex &markIndex, const StateAp *state1, 
+bool MarkCompare::shouldMark( MarkIndex &markIndex, const StateAp *state1,
 			const StateAp *state2 )
 {
 	/* Use a pair iterator to get the transition pairs. */
@@ -403,7 +403,7 @@ int FsmAp::comparePart( TransAp *trans1, TransAp *trans2 )
 		}
 
 		case ValPairIter<CondAp>::RangeOverlap: {
-			int compareRes = FsmAp::compareCondPartPtr( 
+			int compareRes = FsmAp::compareCondPartPtr(
 					outPair.s1Tel.trans, outPair.s2Tel.trans );
 			if ( compareRes != 0 )
 				return compareRes;
@@ -442,7 +442,7 @@ int FsmAp::compareCondPartPtr( CondAp *trans1, CondAp *trans2 )
 			return 1;
 		else if ( trans1->toState != 0 ) {
 			/* Both of targets are set. */
-			return CmpOrd< MinPartition* >::compare( 
+			return CmpOrd< MinPartition* >::compare(
 				trans1->toState->alg.partition, trans2->toState->alg.partition );
 		}
 	}
@@ -515,7 +515,7 @@ int FsmAp::compareFullPtr( TransAp *trans1, TransAp *trans2 )
 }
 
 
-bool FsmAp::shouldMarkPtr( MarkIndex &markIndex, TransAp *trans1, 
+bool FsmAp::shouldMarkPtr( MarkIndex &markIndex, TransAp *trans1,
 				TransAp *trans2 )
 {
 	std::cerr << "FIXME: " << __PRETTY_FUNCTION__ << std::endl;
@@ -528,7 +528,7 @@ bool FsmAp::shouldMarkPtr( MarkIndex &markIndex, TransAp *trans1,
 	else if ( trans1 != 0 ) {
 		/* Both of the transitions are set. If the target pair is marked, then
 		 * the pair we are considering gets marked. */
-		return markIndex.isPairMarked( trans1->condList.head->toState->alg.stateNum, 
+		return markIndex.isPairMarked( trans1->condList.head->toState->alg.stateNum,
 				trans2->condList.head->toState->alg.stateNum );
 	}
 

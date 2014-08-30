@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -88,7 +88,7 @@ void BinaryBasic::genAnalysis()
 
 	/* Choose default transitions and the single transition. */
 	redFsm->chooseDefaultSpan();
-		
+
 	/* Choose the singles. */
 	redFsm->chooseSingle();
 
@@ -433,14 +433,14 @@ void BinaryBasic::LOCATE_COND()
 				out << " ) _cpc += " << condValOffset << ";\n";
 			}
 
-			out << 
+			out <<
 				"	}\n";
 		}
 
-		out << 
+		out <<
 			"	}\n";
 	}
-	
+
 	out <<
 		"	{\n"
 		"		index " << ARR_TYPE( condKeys ) << " _lower;\n"
@@ -488,10 +488,10 @@ void BinaryBasic::writeExec()
 		"	uint _have = 0;\n"
 		"	uint _cont = 1;\n";
 
-	if ( redFsm->anyToStateActions() || redFsm->anyRegActions() 
+	if ( redFsm->anyToStateActions() || redFsm->anyRegActions()
 			|| redFsm->anyFromStateActions() )
 	{
-		out << 
+		out <<
 			"	index " << ARR_TYPE( actions ) << " _acts;\n"
 			"	uint _nacts;\n";
 	}
@@ -505,21 +505,21 @@ void BinaryBasic::writeExec()
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		_cont = 0;\n";
 	}
 
-	out << 
+	out <<
 //		"label _resume {\n"
 		"_have = 0;\n";
 
 	if ( !noEnd ) {
-		out << 
+		out <<
 			"	if ( " << P() << " == " << PE() << " ) {\n";
 
 		if ( redFsm->anyEofTrans() || redFsm->anyEofActions() ) {
-			out << 
+			out <<
 				"	if ( " << P() << " == " << vEOF() << " )\n"
 				"	{\n";
 
@@ -554,20 +554,20 @@ void BinaryBasic::writeExec()
 			}
 
 			out << "}\n";
-			
-			out << 
+
+			out <<
 				"	}\n"
 				"\n";
 		}
 
-		out << 
+		out <<
 			"	if ( _have == 0 )\n"
 			"		_cont = 0;\n"
 			"	}\n";
 
 	}
 
-	out << 
+	out <<
 		"	if ( _cont == 1 ) {\n"
 		"	if ( _have == 0 ) {\n";
 
@@ -595,7 +595,7 @@ void BinaryBasic::writeExec()
 	LOCATE_COND();
 
 	out << "}\n";
-	
+
 	out << "if ( _cont == 1 ) {\n";
 
 	if ( redFsm->anyRegCurStateRef() )
@@ -623,7 +623,7 @@ void BinaryBasic::writeExec()
 			"\n";
 	}
 
-//	if ( /*redFsm->anyRegActions() || */ redFsm->anyActionGotos() || 
+//	if ( /*redFsm->anyRegActions() || */ redFsm->anyActionGotos() ||
 //			redFsm->anyActionCalls() || redFsm->anyActionRets() )
 //	{
 //		out << "}\n";
@@ -648,12 +648,12 @@ void BinaryBasic::writeExec()
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		_cont = 0;\n";
 	}
 
-	out << 
+	out <<
 		"	if ( _cont == 1 )\n"
 		"		" << P() << " += 1;\n"
 		"\n"

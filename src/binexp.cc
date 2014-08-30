@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -24,7 +24,7 @@
 #include "redfsm.h"
 #include "gendata.h"
 
-BinaryExpanded::BinaryExpanded( const CodeGenArgs &args ) 
+BinaryExpanded::BinaryExpanded( const CodeGenArgs &args )
 :
 	Binary(args)
 {
@@ -85,7 +85,7 @@ void BinaryExpanded::genAnalysis()
 
 	/* Choose default transitions and the single transition. */
 	redFsm->chooseDefaultSpan();
-		
+
 	/* Choose single. */
 	redFsm->chooseSingle();
 
@@ -282,7 +282,7 @@ void BinaryExpanded::writeExec()
 	testEofUsed = false;
 	outLabelUsed = false;
 
-	out << 
+	out <<
 		"	{\n"
 		"	int _klen;\n";
 
@@ -312,7 +312,7 @@ void BinaryExpanded::writeExec()
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
@@ -348,7 +348,7 @@ void BinaryExpanded::writeExec()
 		"\n";
 
 	if ( redFsm->anyRegActions() ) {
-		out << 
+		out <<
 			"	if ( " << ARR_REF( condActions ) << "[_cond] == 0 )\n"
 			"		goto _again;\n"
 			"\n";
@@ -372,7 +372,7 @@ void BinaryExpanded::writeExec()
 		out << "\n";
 	}
 
-//	if ( redFsm->anyRegActions() || redFsm->anyActionGotos() || 
+//	if ( redFsm->anyRegActions() || redFsm->anyActionGotos() ||
 //			redFsm->anyActionCalls() || redFsm->anyActionRets() )
 	out << "}\n";
 	out << "label _again {\n";
@@ -387,19 +387,19 @@ void BinaryExpanded::writeExec()
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
 
 	if ( !noEnd ) {
-		out << 
+		out <<
 			"	" << P() << " += 1;\n"
 			"	if ( " << P() << " != " << PE() << " )\n"
 			"		goto _resume;\n";
 	}
 	else {
-		out << 
+		out <<
 			"	" << P() << " += 1;\n"
 			"	goto _resume;\n";
 	}
@@ -429,7 +429,7 @@ void BinaryExpanded::writeExec()
 				"	}\n";
 		}
 
-		out << 
+		out <<
 			"	}\n"
 			"\n";
 	}

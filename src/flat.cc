@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -24,7 +24,7 @@
 #include "redfsm.h"
 #include "gendata.h"
 
-Flat::Flat( const CodeGenArgs &args ) 
+Flat::Flat( const CodeGenArgs &args )
 :
 	CodeGen( args ),
 	actions(          "actions",             *this ),
@@ -67,7 +67,7 @@ void Flat::taFlatIndexOffset()
 	for ( RedStateList::Iter st = redFsm->stateList; st.lte(); st++ ) {
 		/* Write the index offset. */
 		flatIndexOffset.value( curIndOffset );
-		
+
 		/* Move the index offset ahead. */
 		if ( st->transList != 0 )
 			curIndOffset += keyOps->span( st->lowKey, st->highKey );
@@ -392,14 +392,14 @@ void Flat::LOCATE_TRANS()
 				out << " ) _cpc += " << condValOffset << ";\n";
 			}
 
-			out << 
+			out <<
 				"	}\n";
 		}
 
-		out << 
+		out <<
 			"	}\n";
 	}
-	
+
 	out <<
 		"	{\n"
 		"		index " << ARR_TYPE( condKeys ) << " _lower;\n"
@@ -471,7 +471,7 @@ void Flat::CALL( ostream &ret, int callDest, int targState, bool inFinish )
 		ret << "}$ ";
 	}
 
-	ret << STACK() << "[" << TOP() << "] = " << vCS() << "; " << TOP() << " += 1;" << vCS() << " = " << 
+	ret << STACK() << "[" << TOP() << "] = " << vCS() << "; " << TOP() << " += 1;" << vCS() << " = " <<
 			callDest << "; " << "goto _again;}$";
 }
 
@@ -486,7 +486,7 @@ void Flat::NCALL( ostream &ret, int callDest, int targState, bool inFinish )
 		ret << "}$ ";
 	}
 
-	ret << STACK() << "[" << TOP() << "] = " << vCS() << "; " << TOP() << " += 1;" << vCS() << " = " << 
+	ret << STACK() << "[" << TOP() << "] = " << vCS() << "; " << TOP() << " += 1;" << vCS() << " = " <<
 			callDest << "; }$";
 }
 

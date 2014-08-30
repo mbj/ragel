@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -41,14 +41,14 @@ void GotoExpanded::genAnalysis()
 
 	/* Choose default transitions and the single transition. */
 	redFsm->chooseDefaultSpan();
-		
+
 	/* Choose single. */
 	redFsm->chooseSingle();
 
 	/* If any errors have occured in the input file then don't write anything. */
 	if ( gblErrorCount > 0 )
 		return;
-	
+
 	/* Anlayze Machine will find the final action reference counts, among other
 	 * things. We will use these in reporting the usage of fsm directives in
 	 * action code. */
@@ -78,7 +78,7 @@ std::ostream &GotoExpanded::EXEC_ACTIONS()
 				ACTION( out, item->value, IlOpts( 0, false, false ) );
 
 			if ( redFsm->anyRegNbreak() ) {
-				out << 
+				out <<
 					"	if ( _nbreak == 1 )\n"
 					"		goto _out;\n";
 				outLabelUsed = true;
@@ -201,20 +201,20 @@ void GotoExpanded::writeExec()
 		out << "	int _ps = 0;\n";
 
 	if ( redFsm->anyRegNbreak() ) {
-		out << 
+		out <<
 			"	int _nbreak;\n";
 	}
 
 	if ( !noEnd ) {
 		testEofUsed = true;
-		out << 
+		out <<
 			"	if ( " << P() << " == " << PE() << " )\n"
 			"		goto _test_eof;\n";
 	}
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
@@ -229,12 +229,12 @@ void GotoExpanded::writeExec()
 			"\n";
 	}
 
-	out << 
+	out <<
 		"	switch ( " << vCS() << " ) {\n";
 		STATE_GOTOS() <<
 		"	}\n"
 		"\n";
-		TRANSITIONS() << 
+		TRANSITIONS() <<
 		"\n";
 
 	if ( redFsm->anyRegActions() )
@@ -252,19 +252,19 @@ void GotoExpanded::writeExec()
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
 
 	if ( !noEnd ) {
-		out << 
+		out <<
 			"	" << P() << "+= 1;\n"
 			"	if ( " << P() << " != " << PE() << " )\n"
 			"		goto _resume;\n";
 	}
 	else {
-		out << 
+		out <<
 			"	" << P() << " += 1;\n"
 			"	goto _resume;\n";
 	}

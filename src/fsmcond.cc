@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 /*
@@ -34,7 +34,7 @@
 #include <assert.h>
 #include <iostream>
 
-long TransAp::condFullSize() 
+long TransAp::condFullSize()
 	{ return condSpace == 0 ? 1 : condSpace->fullSize(); }
 
 void FsmAp::expandConds( StateAp *fromState, TransAp *trans, const CondSet &fromCS, const CondSet &mergedCS )
@@ -74,7 +74,7 @@ void FsmAp::expandConds( StateAp *fromState, TransAp *trans, const CondSet &from
 				/* Attach only if our caller wants the expanded transitions
 				 * attached. */
 				attachTrans( fromState, cti->toState, cond );
-				
+
 				/* Call the user callback to add in the original source transition. */
 				addInTrans( cond, cti );
 
@@ -86,7 +86,7 @@ void FsmAp::expandConds( StateAp *fromState, TransAp *trans, const CondSet &from
 			/* Merge newItems in. Both the condList and newItems are sorted. Make
 			 * a sorted list out of them. */
 			CondAp *dest = trans->condList.head;
-			while ( dest != 0 && newItems.head != 0 ) { 
+			while ( dest != 0 && newItems.head != 0 ) {
 				if ( newItems.head->key.getVal() > dest->key.getVal() ) {
 					dest = dest->next;
 				}
@@ -113,7 +113,7 @@ void FsmAp::expandCondTransitions( StateAp *fromState, TransAp *destTrans, Trans
 
 	if ( srcTrans->condSpace != 0 )
 		srcCS.insert( srcTrans->condSpace->condSet );
-	
+
 	mergedCS.insert( destCS );
 	mergedCS.insert( srcCS );
 

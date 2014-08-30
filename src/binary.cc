@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -656,7 +656,7 @@ void Binary::LOCATE_COND()
 
 	out <<
 		"	_cpc = 0;\n";
-	
+
 	if ( condSpaceList.length() > 0 ) {
 		out <<
 			"	switch ( " << ARR_REF( transCondSpaces ) << "[_trans] ) {\n"
@@ -672,14 +672,14 @@ void Binary::LOCATE_COND()
 				out << " ) _cpc += " << condValOffset << ";\n";
 			}
 
-			out << 
+			out <<
 				"	}\n";
 		}
 
-		out << 
+		out <<
 			"	}\n";
 	}
-	
+
 	out <<
 		"	{\n"
 		"		index " << ARR_TYPE( condKeys ) << " _lower;\n"
@@ -752,7 +752,7 @@ void Binary::CALL( ostream &ret, int callDest, int targState, bool inFinish )
 	}
 
 	ret << STACK() << "[" << TOP() << "] = " <<
-			vCS() << "; " << TOP() << " += 1;" << vCS() << " = " << 
+			vCS() << "; " << TOP() << " += 1;" << vCS() << " = " <<
 			callDest << "; " << "goto _again;}$";
 }
 
@@ -784,7 +784,7 @@ void Binary::NCALL( ostream &ret, int callDest, int targState, bool inFinish )
 	}
 
 	ret << STACK() << "[" << TOP() << "] = " <<
-			vCS() << "; " << TOP() << " += 1;" << vCS() << " = " << 
+			vCS() << "; " << TOP() << " += 1;" << vCS() << " = " <<
 			callDest << "; }$";
 }
 

@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 
@@ -67,7 +67,7 @@ void XMLCodeGen::writeActionTableList()
 
 	out << "    <action_table_list length=\"" << numTables << "\">\n";
 	for ( int t = 0; t < numTables; t++ ) {
-		out << "      <action_table id=\"" << t << "\" length=\"" << 
+		out << "      <action_table id=\"" << t << "\" length=\"" <<
 				tables[t]->key.length() << "\">";
 		for ( ActionTable::Iter atel = tables[t]->key; atel.lte(); atel++ ) {
 			out << atel->value->actionId;
@@ -138,7 +138,7 @@ void XMLCodeGen::writeEofTrans( StateAp *state )
 	RedActionTable *eofActions = 0;
 	if ( state->eofActionTable.length() > 0 )
 		eofActions = actionTableMap.find( state->eofActionTable );
-	
+
 	/* The <eof_t> is used when there is an eof target, otherwise the eof
 	 * action goes into state actions. */
 	if ( state->eofTarget != 0 ) {
@@ -147,7 +147,7 @@ void XMLCodeGen::writeEofTrans( StateAp *state )
 		if ( eofActions != 0 )
 			out << " " << eofActions->id;
 		else
-			out << " x"; 
+			out << " x";
 
 		out << "</eof_t>" << endl;
 	}
@@ -283,14 +283,14 @@ void XMLCodeGen::writeLmSwitch( InlineItem *item )
 		out << "<goto>" << fsm->errState->alg.stateNum << "</goto>";
 		out << "</sub_action>\n";
 	}
-	
+
 	bool needDefault = false;
 	for ( LmPartList::Iter lmi = *longestMatch->longestMatchList; lmi.lte(); lmi++ ) {
 		if ( lmi->inLmSelect ) {
 			if ( lmi->action == 0 )
 				needDefault = true;
 			else {
-				/* Open the action. Write it with the context that sets up _p 
+				/* Open the action. Write it with the context that sets up _p
 				 * when doing control flow changes from inside the machine. */
 				out << "        <sub_action id=\"" << lmi->longestMatchId << "\">";
 				out << "<exec><get_tokend></get_tokend></exec>";
@@ -336,19 +336,19 @@ void XMLCodeGen::writeInlineList( InlineList *inlineList )
 		case InlineItem::Break:
 			out << "<break></break>";
 			break;
-		case InlineItem::Ret: 
+		case InlineItem::Ret:
 			out << "<ret></ret>";
 			break;
 		case InlineItem::PChar:
 			out << "<pchar></pchar>";
 			break;
-		case InlineItem::Char: 
+		case InlineItem::Char:
 			out << "<char></char>";
 			break;
-		case InlineItem::Curs: 
+		case InlineItem::Curs:
 			out << "<curs></curs>";
 			break;
-		case InlineItem::Targs: 
+		case InlineItem::Targs:
 			out << "<targs></targs>";
 			break;
 		case InlineItem::Entry:
@@ -363,8 +363,8 @@ void XMLCodeGen::writeInlineList( InlineList *inlineList )
 			break;
 
 		case InlineItem::LmSetActId:
-			out << "<set_act>" << 
-					item->longestMatchPart->longestMatchId << 
+			out << "<set_act>" <<
+					item->longestMatchPart->longestMatchId <<
 					"</set_act>";
 			break;
 		case InlineItem::LmSetTokEnd:
@@ -380,7 +380,7 @@ void XMLCodeGen::writeInlineList( InlineList *inlineList )
 		case InlineItem::LmOnLagBehind:
 			writeLmOnLagBehind( item );
 			break;
-		case InlineItem::LmSwitch: 
+		case InlineItem::LmSwitch:
 			writeLmSwitch( item );
 			break;
 
@@ -401,7 +401,7 @@ void XMLCodeGen::writeInlineList( InlineList *inlineList )
 void XMLCodeGen::writeAction( Action *action )
 {
 	out << "      <action id=\"" << action->actionId << "\"";
-	if ( !action->name.empty() ) 
+	if ( !action->name.empty() )
 		out << " name=\"" << action->name << "\"";
 	out << " line=\"" << action->loc.line << "\" col=\"" << action->loc.col << "\">";
 	writeInlineList( action->inlineList );
@@ -437,7 +437,7 @@ void XMLCodeGen::writeStateActions( StateAp *state )
 	RedActionTable *eofActions = 0;
 	if ( state->eofTarget == 0 && state->eofActionTable.length() > 0 )
 		eofActions = actionTableMap.find( state->eofActionTable );
-	
+
 	if ( toStateActions != 0 || fromStateActions != 0 || eofActions != 0 ) {
 		out << "      <state_actions>";
 		if ( toStateActions != 0 )
@@ -486,7 +486,7 @@ bool XMLCodeGen::writeNameInst( NameInst *nameInst )
 	bool written = false;
 	if ( nameInst->parent != 0 )
 		written = writeNameInst( nameInst->parent );
-	
+
 	if ( !nameInst->name.empty() ) {
 		if ( written )
 			out << '_';
@@ -520,8 +520,8 @@ void XMLCodeGen::writeEntryPoints()
 void XMLCodeGen::writeMachine()
 {
 	/* Open the machine. */
-	out << "  <machine>\n"; 
-	
+	out << "  <machine>\n";
+
 	/* Action tables. */
 	reduceActionTables();
 
@@ -530,12 +530,12 @@ void XMLCodeGen::writeMachine()
 	writeConditions();
 
 	/* Start state. */
-	out << "    <start_state>" << fsm->startState->alg.stateNum << 
+	out << "    <start_state>" << fsm->startState->alg.stateNum <<
 			"</start_state>\n";
-	
+
 	/* Error state. */
 	if ( fsm->errState != 0 ) {
-		out << "    <error_state>" << fsm->errState->alg.stateNum << 
+		out << "    <error_state>" << fsm->errState->alg.stateNum <<
 			"</error_state>\n";
 	}
 
@@ -556,7 +556,7 @@ void XMLCodeGen::writeConditions()
 
 		out << "    <cond_space_list length=\"" << condData->condSpaceMap.length() << "\">\n";
 		for ( CondSpaceMap::Iter cs = condData->condSpaceMap; cs.lte(); cs++ ) {
-			out << "      <cond_space id=\"" << cs->condSpaceId << 
+			out << "      <cond_space id=\"" << cs->condSpaceId <<
 				"\" length=\"" << cs->condSet.length() << "\">";
 			for ( CondSet::Iter csi = cs->condSet; csi.lte(); csi++ )
 				out << " " << (*csi)->actionId;
@@ -586,7 +586,7 @@ void XMLCodeGen::writeXML()
 
 	/* Alphabet type. */
 	out << "  <alphtype>" << keyOps->alphType->internalName << "</alphtype>\n";
-	
+
 	/* Getkey expression. */
 	if ( pd->getKeyExpr != 0 ) {
 		out << "  <getkey>";
@@ -624,7 +624,7 @@ void XMLCodeGen::writeXML()
 		writeInlineList( pd->pExpr );
 		out << "</p_expr>\n";
 	}
-	
+
 	if ( pd->peExpr != 0 ) {
 		out << "  <pe_expr>";
 		writeInlineList( pd->peExpr );
@@ -636,51 +636,51 @@ void XMLCodeGen::writeXML()
 		writeInlineList( pd->eofExpr );
 		out << "</eof_expr>\n";
 	}
-	
+
 	if ( pd->csExpr != 0 ) {
 		out << "  <cs_expr>";
 		writeInlineList( pd->csExpr );
 		out << "</cs_expr>\n";
 	}
-	
+
 	if ( pd->topExpr != 0 ) {
 		out << "  <top_expr>";
 		writeInlineList( pd->topExpr );
 		out << "</top_expr>\n";
 	}
-	
+
 	if ( pd->stackExpr != 0 ) {
 		out << "  <stack_expr>";
 		writeInlineList( pd->stackExpr );
 		out << "</stack_expr>\n";
 	}
-	
+
 	if ( pd->actExpr != 0 ) {
 		out << "  <act_expr>";
 		writeInlineList( pd->actExpr );
 		out << "</act_expr>\n";
 	}
-	
+
 	if ( pd->tokstartExpr != 0 ) {
 		out << "  <tokstart_expr>";
 		writeInlineList( pd->tokstartExpr );
 		out << "</tokstart_expr>\n";
 	}
-	
+
 	if ( pd->tokendExpr != 0 ) {
 		out << "  <tokend_expr>";
 		writeInlineList( pd->tokendExpr );
 		out << "</tokend_expr>\n";
 	}
-	
+
 	if ( pd->dataExpr != 0 ) {
 		out << "  <data_expr>";
 		writeInlineList( pd->dataExpr );
 		out << "</data_expr>\n";
 	}
-	
+
 	writeExports();
-	
+
 	writeMachine();
 
 	out <<

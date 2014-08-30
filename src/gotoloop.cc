@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -42,7 +42,7 @@ void GotoLooped::genAnalysis()
 
 	/* Choose default transitions and the single transition. */
 	redFsm->chooseDefaultSpan();
-		
+
 	/* Choose single. */
 	redFsm->chooseSingle();
 
@@ -168,7 +168,7 @@ std::ostream &GotoLooped::EXEC_FUNCS()
 		"	_acts += 1;\n"
 		"	while ( _nacts > 0 ) {\n"
 		"		switch ( deref( " << ARR_REF( actions ) << ", _acts ) ) {\n";
-		ACTION_SWITCH() << 
+		ACTION_SWITCH() <<
 		"		}\n"
 		"		_acts += 1;\n"
 		"		_nacts -= 1;\n"
@@ -198,10 +198,10 @@ void GotoLooped::writeExec()
 	if ( redFsm->anyRegCurStateRef() )
 		out << "	int _ps = 0;\n";
 
-	if ( redFsm->anyToStateActions() || redFsm->anyRegActions() 
+	if ( redFsm->anyToStateActions() || redFsm->anyRegActions()
 			|| redFsm->anyFromStateActions() )
 	{
-		out << 
+		out <<
 			"	index " << ARR_TYPE( actions ) << " _acts;\n"
 			"	uint _nacts;\n";
 	}
@@ -214,14 +214,14 @@ void GotoLooped::writeExec()
 
 	if ( !noEnd ) {
 		testEofUsed = true;
-		out << 
+		out <<
 			"	if ( " << P() << " == " << PE() << " )\n"
 			"		goto _test_eof;\n";
 	}
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
@@ -273,19 +273,19 @@ void GotoLooped::writeExec()
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
 
 	if ( !noEnd ) {
-		out << 
+		out <<
 			"	" << P() << " += 1;\n"
 			"	if ( " << P() << " != " << PE() << " )\n"
 			"		goto _resume;\n";
 	}
 	else {
-		out << 
+		out <<
 			"	" << P() << " += 1;\n"
 			"	goto _resume;\n";
 	}
@@ -294,7 +294,7 @@ void GotoLooped::writeExec()
 		out << "	_test_eof: {}\n";
 
 	if ( redFsm->anyEofTrans() || redFsm->anyEofActions() ) {
-		out << 
+		out <<
 			"	if ( " << P() << " == " << vEOF() << " )\n"
 			"	{\n";
 
@@ -317,7 +317,7 @@ void GotoLooped::writeExec()
 			out <<
 				"	index " << ARR_TYPE( actions ) << " __acts;\n"
 				"	uint __nacts;\n"
-				"	__acts = offset( " << ARR_REF( actions ) << ", " << 
+				"	__acts = offset( " << ARR_REF( actions ) << ", " <<
 						ARR_REF( eofActions ) << "[" << vCS() << "] );\n"
 				"	__nacts = (uint) deref( " << ARR_REF( actions ) << ", __acts ); __acts += 1;\n"
 				"	while ( __nacts > 0 ) {\n"

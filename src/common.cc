@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "pcheck.h"
@@ -51,7 +51,7 @@ HostType hostTypesD[] =
 	{ "dchar",   0,  "dchar",   false,  true,  false,  0,         UINT_MAX,    4 }
 };
 
-HostType hostTypesGo[] = 
+HostType hostTypesGo[] =
 {
 	{ "byte",    0,  "uint8",   false,  true,  false,  U8BIT_MIN,  U8BIT_MAX,   1 },
 	{ "int8",    0,  "int8",    true,   true,  false,  S8BIT_MIN,  S8BIT_MAX,   1 },
@@ -65,16 +65,16 @@ HostType hostTypesGo[] =
 	{ "rune",    0,  "int32",   true,   true,  true,   S32BIT_MIN, S32BIT_MAX,  4 }
 };
 
-HostType hostTypesCrack[] = 
+HostType hostTypesCrack[] =
 {
   { "byte",    0,  "byte",     false,  true,  true,   0,            UCHAR_MAX,    1 },
   { "int32",   0,  "uint32",   false,  true,  false,  S32BIT_MIN,   S32BIT_MAX,   4 },
   { "uint32",  0,  "uint32",   false,  true,  false,  U32BIT_MIN,   U32BIT_MAX,   4 },
   { "int",     0,  "int",      true,   true,  false,  INT_MIN,      INT_MAX,      sizeof(int) },
-  { "uint",    0,  "uint",     true,   true,  false,  0,            UINT_MAX,     sizeof(int) },  
+  { "uint",    0,  "uint",     true,   true,  false,  0,            UINT_MAX,     sizeof(int) },
 };
 
-HostType hostTypesJava[] = 
+HostType hostTypesJava[] =
 {
 	{ "byte",    0,  "byte",   true,   true,  false,  CHAR_MIN,  CHAR_MAX,    1 },
 	{ "short",   0,  "short",  true,   true,  false,  SHRT_MIN,  SHRT_MAX,    2 },
@@ -83,7 +83,7 @@ HostType hostTypesJava[] =
 };
 
 /* What are the appropriate types for ruby? */
-HostType hostTypesRuby[] = 
+HostType hostTypesRuby[] =
 {
 	{ "char",    0,  "char",   true,   true,  false,  CHAR_MIN,  CHAR_MAX,    1 },
 	{ "int",     0,  "int",    true,   true,  false,  INT_MIN,   INT_MAX,     4 },
@@ -120,7 +120,7 @@ const HostLang hostLangCrack =  { HostLang::Crack,  hostTypesCrack,  5,  hostTyp
 HostType *findAlphType( const HostLang *hostLang, const char *s1 )
 {
 	for ( int i = 0; i < hostLang->numHostTypes; i++ ) {
-		if ( strcmp( s1, hostLang->hostTypes[i].data1 ) == 0 && 
+		if ( strcmp( s1, hostLang->hostTypes[i].data1 ) == 0 &&
 				hostLang->hostTypes[i].data2 == 0 )
 		{
 			return hostLang->hostTypes + i;
@@ -133,8 +133,8 @@ HostType *findAlphType( const HostLang *hostLang, const char *s1 )
 HostType *findAlphType( const HostLang *hostLang, const char *s1, const char *s2 )
 {
 	for ( int i = 0; i < hostLang->numHostTypes; i++ ) {
-		if ( strcmp( s1, hostLang->hostTypes[i].data1 ) == 0 && 
-				hostLang->hostTypes[i].data2 != 0 && 
+		if ( strcmp( s1, hostLang->hostTypes[i].data1 ) == 0 &&
+				hostLang->hostTypes[i].data2 != 0 &&
 				strcmp( s2, hostLang->hostTypes[i].data2 ) == 0 )
 		{
 			return hostLang->hostTypes + i;
@@ -161,8 +161,8 @@ ParamCheck::ParamCheck( const char *paramSpec, int argc, const char **argv )
 	argOffset(0),
 	curArg(0),
 	iCurArg(1),
-	paramSpec(paramSpec), 
-	argc(argc), 
+	paramSpec(paramSpec),
+	argc(argc),
 	argv(argv)
 {
 }
@@ -209,7 +209,7 @@ bool ParamCheck::check()
 
 	/* Get the arg char. */
 	char argChar = *argOffset;
-	
+
 	/* Loop over all the parms and look for a match. */
 	const char *pSpec = paramSpec;
 	while ( *pSpec != 0 ) {
@@ -321,9 +321,9 @@ const char *findFileExtension( const char *stemFile )
 			break;
 		}
 		ppos--;
-	} 
+	}
 
-	/* If we got to the front of the string then bail we 
+	/* If we got to the front of the string then bail we
 	 * did not find an extension  */
 	if ( ppos == stemFile )
 		ppos = 0;

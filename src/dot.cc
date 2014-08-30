@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -67,7 +67,7 @@ void GraphvizDotGen::key( Key key )
 			case ' ':
 				out << "SP";
 				break;
-			default:	
+			default:
 				out << "'" << cVal << "'";
 				break;
 		}
@@ -119,7 +119,7 @@ void GraphvizDotGen::transAction( StateAp *fromState, CondAp *trans )
 
 	if ( n > 0 )
 		out << " / ";
-	
+
 	/* Loop the existing actions and write out what's there. */
 	for ( int a = 0; a < n; a++ ) {
 		for ( ActionTable::Iter actIt = actionTables[a]->first(); actIt.lte(); actIt++ ) {
@@ -158,7 +158,7 @@ void GraphvizDotGen::transList( StateAp *state )
 				out << ctel->toState->alg.stateNum;
 
 			/* Begin the label. */
-			out << " [ label = \""; 
+			out << " [ label = \"";
 			onChar( tel->lowKey, tel->highKey, tel->condSpace, ctel->key.getVal() );
 
 			/* Write the action and close the transition. */
@@ -173,7 +173,7 @@ bool GraphvizDotGen::makeNameInst( std::string &res, NameInst *nameInst )
 	bool written = false;
 	if ( nameInst->parent != 0 )
 		written = makeNameInst( res, nameInst->parent );
-	
+
 	if ( !nameInst->name.empty() ) {
 		if ( written )
 			res += '_';
@@ -186,10 +186,10 @@ bool GraphvizDotGen::makeNameInst( std::string &res, NameInst *nameInst )
 
 void GraphvizDotGen::write( )
 {
-	out << 
+	out <<
 		"digraph " << pd->sectionName << " {\n"
 		"	rankdir=LR;\n";
-	
+
 	/* Define the psuedo states. Transitions will be done after the states
 	 * have been defined as either final or not final. */
 	out << "	node [ shape = point ];\n";
@@ -246,7 +246,7 @@ void GraphvizDotGen::write( )
 		transList( st );
 
 	/* Transitions into the start state. */
-	if ( fsm->startState != 0 ) 
+	if ( fsm->startState != 0 )
 		out << "	ENTRY -> " << fsm->startState->alg.stateNum << " [ label = \"IN\" ];\n";
 
 	for ( EntryMap::Iter en = fsm->entryPoints; en.lte(); en++ ) {
@@ -254,7 +254,7 @@ void GraphvizDotGen::write( )
 		std::string name;
 		makeNameInst( name, nameInst );
 		StateAp *state = en->value;
-		out << "	en_" << state->alg.stateNum << 
+		out << "	en_" << state->alg.stateNum <<
 				" -> " << state->alg.stateNum <<
 				" [ label = \"" << name << "\" ];\n";
 	}
@@ -262,8 +262,8 @@ void GraphvizDotGen::write( )
 	/* Out action transitions. */
 	for ( StateList::Iter st = fsm->stateList; st.lte(); st++ ) {
 		if ( st->eofActionTable.length() != 0 ) {
-			out << "	" << st->alg.stateNum << " -> eof_" << 
-					st->alg.stateNum << " [ label = \"EOF"; 
+			out << "	" << st->alg.stateNum << " -> eof_" <<
+					st->alg.stateNum << " [ label = \"EOF";
 			action( &st->eofActionTable );
 			out << "\" ];\n";
 		}

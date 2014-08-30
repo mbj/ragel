@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "fsmgraph.h"
@@ -69,7 +69,7 @@ FsmAp::FsmAp( const FsmAp &graph )
 	stateList(),
 	misfitList(),
 
-	/* Copy in the entry points, 
+	/* Copy in the entry points,
 	 * pointers will be resolved later. */
 	entryPoints(graph.entryPoints),
 	startState(graph.startState),
@@ -77,7 +77,7 @@ FsmAp::FsmAp( const FsmAp &graph )
 
 	/* Will be filled by copy. */
 	finStateSet(),
-	
+
 	/* Misfit accounting is only on during merging. */
 	misfitAccounting(false)
 {
@@ -130,8 +130,8 @@ FsmAp::FsmAp( const FsmAp &graph )
 	startState->foreignInTrans += 1;
 
 	/* Build the final state set. */
-	StateSet::Iter st = graph.finStateSet; 
-	for ( ; st.lte(); st++ ) 
+	StateSet::Iter st = graph.finStateSet;
+	for ( ; st.lte(); st++ )
 		finStateSet.insert((*st)->alg.stateMap);
 }
 
@@ -155,7 +155,7 @@ void FsmAp::setFinState( StateAp *state )
 	/* Is it already a fin state. */
 	if ( state->stateBits & STB_ISFINAL )
 		return;
-	
+
 	state->stateBits |= STB_ISFINAL;
 	finStateSet.insert( state );
 }
@@ -289,7 +289,7 @@ void FsmAp::changeEntry( int id, StateAp *to, StateAp *from )
 	entryPoints.findMulti( id, enLow, enHigh );
 	while ( enLow->value != from )
 		enLow += 1;
-	
+
 	/* Change it to the new target. */
 	enLow->value = to;
 
@@ -357,7 +357,7 @@ void FsmAp::markReachableFromHere( StateAp *state )
 	/* Base case: return; */
 	if ( state->stateBits & STB_ISMARKED )
 		return;
-	
+
 	/* Set this state as processed. We are going to visit all states that this
 	 * state has a transition to. */
 	state->stateBits |= STB_ISMARKED;
@@ -376,7 +376,7 @@ void FsmAp::markReachableFromHereStopFinal( StateAp *state )
 	/* Base case: return; */
 	if ( state->stateBits & STB_ISMARKED )
 		return;
-	
+
 	/* Set this state as processed. We are going to visit all states that this
 	 * state has a transition to. */
 	state->stateBits |= STB_ISMARKED;
@@ -398,7 +398,7 @@ void FsmAp::markReachableFromHereReverse( StateAp *state )
 	/* Base case: return; */
 	if ( state->stateBits & STB_ISMARKED )
 		return;
-	
+
 	/* Set this state as processed. We are going to visit all states with
 	 * transitions into this state. */
 	state->stateBits |= STB_ISMARKED;
@@ -470,7 +470,7 @@ void FsmAp::verifyIntegrity()
 
 void FsmAp::verifyReachability()
 {
-	/* Mark all the states that can be reached 
+	/* Mark all the states that can be reached
 	 * through the set of entry points. */
 	markReachableFromHere( startState );
 	for ( EntryMap::Iter en = entryPoints; en.lte(); en++ )
@@ -510,7 +510,7 @@ void FsmAp::depthFirstOrdering( StateAp *state )
 	/* Doing depth first, put state on the list. */
 	state->stateBits |= STB_ONLIST;
 	stateList.append( state );
-	
+
 	/* Recurse on everything ranges. */
 	for ( TransList::Iter tel = state->outList; tel.lte(); tel++ ) {
 		for ( CondList::Iter cond = tel->condList; cond.lte(); cond++ ) {
@@ -526,7 +526,7 @@ void FsmAp::depthFirstOrdering()
 	/* Init on state list flags. */
 	for ( StateList::Iter st = stateList; st.lte(); st++ )
 		st->stateBits &= ~STB_ONLIST;
-	
+
 	/* Clear out the state list, we will rebuild it. */
 	int stateListLen = stateList.length();
 	stateList.abandon();
@@ -538,7 +538,7 @@ void FsmAp::depthFirstOrdering()
 	depthFirstOrdering( startState );
 	for ( EntryMap::Iter en = entryPoints; en.lte(); en++ )
 		depthFirstOrdering( en->value );
-	
+
 	/* Make sure we put everything back on. */
 	assert( stateListLen == stateList.length() );
 }
@@ -580,7 +580,7 @@ bool FsmAp::checkErrTrans( StateAp *state, CondAp *trans )
 
 bool FsmAp::checkErrTrans( StateAp *state, TransAp *trans )
 {
-	/* 
+	/*
 	 * Look for a gap between this transition and the previous.
 	 */
 	if ( trans->prev == 0 ) {
@@ -594,7 +594,7 @@ bool FsmAp::checkErrTrans( StateAp *state, TransAp *trans )
 		Key nextKey = prev->highKey;
 		ctx->keyOps->increment( nextKey );
 		if ( ctx->keyOps->lt( nextKey, trans->lowKey ) )
-			return true; 
+			return true;
 	}
 
 	/* Check for gaps in the condition list. */

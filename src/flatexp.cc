@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -50,7 +50,7 @@ void FlatExpanded::genAnalysis()
 
 	/* Choose default transitions and the single transition. */
 	redFsm->chooseDefaultSpan();
-		
+
 	/* Do flat expand. */
 	redFsm->makeFlat();
 
@@ -221,13 +221,13 @@ void FlatExpanded::writeExec()
 	testEofUsed = false;
 	outLabelUsed = false;
 
-	out << 
+	out <<
 		"	{\n"
 		"	int _slen;\n";
 
 	if ( redFsm->anyRegCurStateRef() )
 		out << "	int _ps;\n";
-	
+
 	out << "	int _trans;\n";
 	out << "	uint _cond;\n";
 
@@ -246,14 +246,14 @@ void FlatExpanded::writeExec()
 
 	if ( !noEnd ) {
 		testEofUsed = true;
-		out << 
+		out <<
 			"	if ( " << P() << " == " << PE() << " )\n"
 			"		goto _test_eof;\n";
 	}
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
@@ -275,11 +275,11 @@ void FlatExpanded::writeExec()
 	if ( redFsm->anyRegCurStateRef() )
 		out << "	_ps = " << vCS() << ";\n";
 
-	out << 
+	out <<
 		"	" << vCS() << " = (int) " << ARR_REF( condTargs ) << "[_cond];\n\n";
 
 	if ( redFsm->anyRegActions() ) {
-		out << 
+		out <<
 			"	if ( " << ARR_REF( condActions ) << "[_cond] == 0 )\n"
 			"		goto _again;\n"
 			"\n";
@@ -289,7 +289,7 @@ void FlatExpanded::writeExec()
 
 		out <<
 			"	switch ( " << ARR_REF( condActions ) << "[_cond] ) {\n";
-			ACTION_SWITCH() << 
+			ACTION_SWITCH() <<
 			"	}\n"
 			"\n";
 
@@ -304,7 +304,7 @@ void FlatExpanded::writeExec()
 			"\n";
 	}
 
-//	if ( redFsm->anyRegActions() || redFsm->anyActionGotos() || 
+//	if ( redFsm->anyRegActions() || redFsm->anyActionGotos() ||
 //			redFsm->anyActionCalls() || redFsm->anyActionRets() )
 		out << "} label _again {\n";
 
@@ -318,19 +318,19 @@ void FlatExpanded::writeExec()
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
 
 	if ( !noEnd ) {
-		out << 
+		out <<
 			"	" << P() << "+= 1;\n"
 			"	if ( " << P() << " != " << PE() << " )\n"
 			"		goto _resume;\n";
 	}
 	else {
-		out << 
+		out <<
 			"	" << P() << " += 1;\n"
 			"	goto _resume;\n";
 	}

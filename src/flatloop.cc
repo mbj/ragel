@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -51,7 +51,7 @@ void FlatLooped::genAnalysis()
 
 	/* Choose default transitions and the single transition. */
 	redFsm->chooseDefaultSpan();
-		
+
 	/* Do flat expand. */
 	redFsm->makeFlat();
 
@@ -177,23 +177,23 @@ void FlatLooped::writeExec()
 	testEofUsed = false;
 	outLabelUsed = false;
 
-	out << 
+	out <<
 		"	{\n"
 		"	int _slen;\n";
 
 	if ( redFsm->anyRegCurStateRef() )
 		out << "	int _ps;\n";
 
-	out << 
+	out <<
 		"	int _trans;\n"
 		"	uint _cond;\n";
 
-	if ( redFsm->anyToStateActions() || 
+	if ( redFsm->anyToStateActions() ||
 			redFsm->anyRegActions() || redFsm->anyFromStateActions() )
 	{
-		out << 
+		out <<
 			"	index " << ARR_TYPE( actions ) << " _acts;\n"
-			"	uint _nacts;\n"; 
+			"	uint _nacts;\n";
 	}
 
 	out <<
@@ -213,14 +213,14 @@ void FlatLooped::writeExec()
 
 	if ( !noEnd ) {
 		testEofUsed = true;
-		out << 
+		out <<
 			"	if ( " << P() << " == " << PE() << " )\n"
 			"		goto _test_eof;\n";
 	}
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
@@ -288,7 +288,7 @@ void FlatLooped::writeExec()
 			"\n";
 	}
 
-//	if ( redFsm->anyRegActions() || redFsm->anyActionGotos() || 
+//	if ( redFsm->anyRegActions() || redFsm->anyActionGotos() ||
 //			redFsm->anyActionCalls() || redFsm->anyActionRets() )
 		out << "} label _again {\n";
 
@@ -308,19 +308,19 @@ void FlatLooped::writeExec()
 
 	if ( redFsm->errState != 0 ) {
 		outLabelUsed = true;
-		out << 
+		out <<
 			"	if ( " << vCS() << " == " << redFsm->errState->id << " )\n"
 			"		goto _out;\n";
 	}
 
 	if ( !noEnd ) {
-		out << 
+		out <<
 			"	" << P() << " += 1;\n"
 			"	if ( " << P() << " != " << PE() << " )\n"
 			"		goto _resume;\n";
 	}
 	else {
-		out << 
+		out <<
 			"	" << P() << " += 1;\n"
 			"	goto _resume;\n";
 	}
@@ -329,7 +329,7 @@ void FlatLooped::writeExec()
 		out << "} label _test_eof { {}\n";
 
 	if ( redFsm->anyEofTrans() || redFsm->anyEofActions() ) {
-		out << 
+		out <<
 			"	if ( " << P() << " == " << vEOF() << " )\n"
 			"	{\n";
 

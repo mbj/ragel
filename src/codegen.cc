@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "codegen.h"
@@ -54,7 +54,7 @@ TableArray::TableArray( const char *name, CodeGen &codeGen )
 	values(0),
 
 	/*
-	 * Use zero for min and max because 
+	 * Use zero for min and max because
 	 * we we null terminate every array.
 	 */
 	min(0),
@@ -118,8 +118,8 @@ void TableArray::finishAnalyze()
 
 void TableArray::startGenerate()
 {
-	out << "array " << type << " " << 
-		"_" << codeGen.DATA_PREFIX() << name << 
+	out << "array " << type << " " <<
+		"_" << codeGen.DATA_PREFIX() << name <<
 		"( " << min << ", " << max << " ) = { ";
 }
 
@@ -244,7 +244,7 @@ string CodeGen::ACCESS()
 
 
 string CodeGen::P()
-{ 
+{
 	ostringstream ret;
 	if ( pExpr == 0 )
 		ret << "p";
@@ -364,7 +364,7 @@ string CodeGen::TOKEND()
 string CodeGen::GET_KEY()
 {
 	ostringstream ret;
-	if ( getKeyExpr != 0 ) { 
+	if ( getKeyExpr != 0 ) {
 		/* Emit the user supplied method of retrieving the key. */
 		ret << "host( \"-\", 1 ) ={";
 		INLINE_LIST( ret, getKeyExpr, 0, false, false );
@@ -428,10 +428,10 @@ void CodeGen::EXEC( ostream &ret, GenInlineItem *item, int targState, int inFini
 	ret << "))-1;}$\n";
 }
 
-void CodeGen::LM_SWITCH( ostream &ret, GenInlineItem *item, 
+void CodeGen::LM_SWITCH( ostream &ret, GenInlineItem *item,
 		int targState, int inFinish, bool csForced )
 {
-	ret << 
+	ret <<
 		"${	switch( " << ACT() << " ) {\n";
 
 	for ( GenInlineList::Iter lma = *item->children; lma.lte(); lma++ ) {
@@ -449,7 +449,7 @@ void CodeGen::LM_SWITCH( ostream &ret, GenInlineItem *item,
 		ret << "}\n";
 	}
 
-	ret << 
+	ret <<
 		"	}}$\n"
 		"\t";
 }
@@ -473,7 +473,7 @@ void CodeGen::SET_TOKEND( ostream &ret, GenInlineItem *item )
 {
 	/* The tokend action sets tokend. */
 	ret << TOKEND() << " = " << P();
-	if ( item->offset != 0 ) 
+	if ( item->offset != 0 )
 		out << "+" << item->offset;
 	out << ";";
 }
@@ -498,7 +498,7 @@ void CodeGen::SET_TOKSTART( ostream &ret, GenInlineItem *item )
 	ret << TOKSTART() << " = " << P() << ";";
 }
 
-void CodeGen::HOST_STMT( ostream &ret, GenInlineItem *item, 
+void CodeGen::HOST_STMT( ostream &ret, GenInlineItem *item,
 		int targState, bool inFinish, bool csForced )
 {
 	if ( item->children->length() > 0 ) {
@@ -509,7 +509,7 @@ void CodeGen::HOST_STMT( ostream &ret, GenInlineItem *item,
 	}
 }
 
-void CodeGen::HOST_EXPR( ostream &ret, GenInlineItem *item, 
+void CodeGen::HOST_EXPR( ostream &ret, GenInlineItem *item,
 		int targState, bool inFinish, bool csForced )
 {
 	if ( item->children->length() > 0 ) {
@@ -520,7 +520,7 @@ void CodeGen::HOST_EXPR( ostream &ret, GenInlineItem *item,
 	}
 }
 
-void CodeGen::HOST_TEXT( ostream &ret, GenInlineItem *item, 
+void CodeGen::HOST_TEXT( ostream &ret, GenInlineItem *item,
 		int targState, bool inFinish, bool csForced )
 {
 	if ( item->children->length() > 0 ) {
@@ -531,7 +531,7 @@ void CodeGen::HOST_TEXT( ostream &ret, GenInlineItem *item,
 	}
 }
 
-void CodeGen::GEN_STMT( ostream &ret, GenInlineItem *item, 
+void CodeGen::GEN_STMT( ostream &ret, GenInlineItem *item,
 		int targState, bool inFinish, bool csForced )
 {
 	if ( item->children->length() > 0 ) {
@@ -542,7 +542,7 @@ void CodeGen::GEN_STMT( ostream &ret, GenInlineItem *item,
 	}
 }
 
-void CodeGen::GEN_EXPR( ostream &ret, GenInlineItem *item, 
+void CodeGen::GEN_EXPR( ostream &ret, GenInlineItem *item,
 		int targState, bool inFinish, bool csForced )
 {
 	if ( item->children->length() > 0 ) {
@@ -555,7 +555,7 @@ void CodeGen::GEN_EXPR( ostream &ret, GenInlineItem *item,
 
 /* Write out an inline tree structure. Walks the list and possibly calls out
  * to virtual functions than handle language specific items in the tree. */
-void CodeGen::INLINE_LIST( ostream &ret, GenInlineList *inlineList, 
+void CodeGen::INLINE_LIST( ostream &ret, GenInlineList *inlineList,
 		int targState, bool inFinish, bool csForced )
 {
 	for ( GenInlineList::Iter item = *inlineList; item.lte(); item++ ) {
@@ -716,18 +716,18 @@ void CodeGen::writeInit()
 
 	if ( !noCS )
 		out << "\t" << vCS() << " = " << START() << ";\n";
-	
+
 	/* If there are any calls, then the stack top needs initialization. */
 	if ( redFsm->anyActionCalls() || redFsm->anyActionNcalls() || redFsm->anyActionRets() || redFsm->anyActionNrets() )
 		out << "\t" << TOP() << " = 0;\n";
 
 	if ( hasLongestMatch ) {
-		out << 
+		out <<
 			"	" << TOKSTART() << " = nil;\n"
 			"	" << TOKEND() << " = nil;\n";
 
 		if ( redFsm->usingAct() ) {
-			out << 
+			out <<
 				"	" << ACT() << " = 0;\n";
 		}
 	}
@@ -767,7 +767,7 @@ void CodeGen::STATE_IDS()
 
 	if ( entryPointNames.length() > 0 ) {
 		for ( EntryNameVect::Iter en = entryPointNames; en.lte(); en++ ) {
-			out << "value int " << DATA_PREFIX() + "en_" + *en << 
+			out << "value int " << DATA_PREFIX() + "en_" + *en <<
 					" = " << entryPointIds[en.pos()] << ";\n";
 		}
 		out << "\n";
@@ -793,8 +793,8 @@ void CodeGen::writeExports()
 {
 	if ( exportList.length() > 0 ) {
 		for ( ExportList::Iter ex = exportList; ex.lte(); ex++ ) {
-			out << "export " << ALPH_TYPE() << " " << 
-					DATA_PREFIX() << "ex_" << ex->name << " " << 
+			out << "export " << ALPH_TYPE() << " " <<
+					DATA_PREFIX() << "ex_" << ex->name << " " <<
 					KEY(ex->key) << ";\n";
 		}
 		out << "\n";

@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "fsmgraph.h"
@@ -113,7 +113,7 @@ void FsmAp::minimizePartition1()
 	if ( stateList.length() == 0 )
 		return;
 
-	/* 
+	/*
 	 * First thing is to partition the states by final state status and
 	 * transition functions. This gives us an initial partitioning to work
 	 * with.
@@ -127,7 +127,7 @@ void FsmAp::minimizePartition1()
 	StateList::Iter state = stateList;
 	for ( int s = 0; state.lte(); state++, s++ )
 		statePtrs[s] = state;
-		
+
 	/* Sort the states using the array of states. */
 	mergeSort.sort( statePtrs, numStates );
 
@@ -183,7 +183,7 @@ int FsmAp::splitCandidates( StateAp **statePtrs, MinPartition *parts, int numPar
 	MergeSortPartition mergeSort( ctx );
 	PartitionCompare partCompare( ctx );
 
-	/* The lists of unsplitable (partList) and splitable partitions. 
+	/* The lists of unsplitable (partList) and splitable partitions.
 	 * Only partitions in the splitable list are check for needing splitting. */
 	PartitionList partList, splittable;
 
@@ -198,7 +198,7 @@ int FsmAp::splitCandidates( StateAp **statePtrs, MinPartition *parts, int numPar
 
 		/* Look for a trans out of any state in the partition. */
 		for ( StateList::Iter state = parts[p].list; state.lte(); state++ ) {
-			/* If there is at least one transition out to another state then 
+			/* If there is at least one transition out to another state then
 			 * the partition becomes splittable. */
 			if ( state->outList.length() > 0 ) {
 				parts[p].active = true;
@@ -316,7 +316,7 @@ void FsmAp::minimizePartition2()
 	if ( stateList.length() == 0 )
 		return;
 
-	/* 
+	/*
 	 * First thing is to partition the states by final state status and
 	 * transition functions. This gives us an initial partitioning to work
 	 * with.
@@ -330,7 +330,7 @@ void FsmAp::minimizePartition2()
 	StateList::Iter state = stateList;
 	for ( int s = 0; state.lte(); state++, s++ )
 		statePtrs[s] = state;
-		
+
 	/* Sort the states using the array of states. */
 	mergeSort.sort( statePtrs, numStates );
 
@@ -473,7 +473,7 @@ bool FsmAp::minimizeRound()
 	/* Sort The list. */
 	mergeSort.sort( statePtrs, stateList.length() );
 
-	/* Walk the list looking for duplicates next to each other, 
+	/* Walk the list looking for duplicates next to each other,
 	 * merge in any duplicates. */
 	StateAp **pLast = statePtrs;
 	StateAp **pState = statePtrs + 1;
@@ -524,7 +524,7 @@ void FsmAp::removeUnreachableStates()
 	 * misfit list. */
 	assert( !misfitAccounting && misfitList.length() == 0 );
 
-	/* Mark all the states that can be reached 
+	/* Mark all the states that can be reached
 	 * through the existing set of entry points. */
 	markReachableFromHere( startState );
 	for ( EntryMap::Iter en = entryPoints; en.lte(); en++ )
@@ -553,7 +553,7 @@ bool FsmAp::outListCovers( StateAp *state )
 	/* Must be at least one range to cover. */
 	if ( state->outList.length() == 0 )
 		return false;
-	
+
 	/* The first must start at the lower bound. */
 	TransList::Iter trans = state->outList.first();
 	if ( ctx->keyOps->lt( ctx->keyOps->minKey, trans->lowKey ) )
@@ -615,7 +615,7 @@ void FsmAp::removeDeadEndStates()
 			stateList.detach( state );
 			delete state;
 		}
-		
+
 		state = next;
 	}
 }
@@ -743,8 +743,8 @@ void FsmAp::compressTransitions()
 				/* Require there be no conditions in either of the merge
 				 * candidates. */
 				bool merge = false;
-				if ( trans->condSpace == 0 && 
-						next->condSpace == 0 && 
+				if ( trans->condSpace == 0 &&
+						next->condSpace == 0 &&
 						ctx->keyOps->eq( trans->highKey, nextLow ) )
 				{
 					if ( trans->condSpace == 0 &&
@@ -758,7 +758,7 @@ void FsmAp::compressTransitions()
 						CondAp *nextCond = next->condList.head;
 
 						if ( cond->toState == nextCond->toState &&
-								CmpActionTable::compare( cond->actionTable, 
+								CmpActionTable::compare( cond->actionTable,
 								nextCond->actionTable ) == 0 )
 						{
 							merge = true;

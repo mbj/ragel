@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "redfsm.h"
@@ -87,7 +87,7 @@ void RedFsmAp::depthFirstOrdering( RedStateAp *state )
 	/* Doing depth first, put state on the list. */
 	state->onStateList = true;
 	stateList.append( state );
-	
+
 	/* At this point transitions should only be in ranges. */
 	assert( state->outSingle.length() == 0 );
 	assert( state->defTrans == 0 );
@@ -107,7 +107,7 @@ void RedFsmAp::depthFirstOrdering()
 	/* Init on state list flags. */
 	for ( RedStateList::Iter st = stateList; st.lte(); st++ )
 		st->onStateList = false;
-	
+
 	/* Clear out the state list, we will rebuild it. */
 	int stateListLen = stateList.length();
 	stateList.abandon();
@@ -120,7 +120,7 @@ void RedFsmAp::depthFirstOrdering()
 		depthFirstOrdering( *en );
 	if ( forcedErrorState )
 		depthFirstOrdering( errState );
-	
+
 	/* Make sure we put everything back on. */
 	assert( stateListLen == stateList.length() );
 }
@@ -162,13 +162,13 @@ void RedFsmAp::sortStateIdsByFinal()
 
 	/* First pass to assign non final ids. */
 	for ( RedStateList::Iter st = stateList; st.lte(); st++ ) {
-		if ( ! st->isFinal ) 
+		if ( ! st->isFinal )
 			st->id = nextStateId++;
 	}
 
 	/* Second pass to assign final ids. */
 	for ( RedStateList::Iter st = stateList; st.lte(); st++ ) {
-		if ( st->isFinal ) 
+		if ( st->isFinal )
 			st->id = nextStateId++;
 	}
 }
@@ -193,7 +193,7 @@ void RedFsmAp::sortByStateId()
 	RedStateAp **ptrList = new RedStateAp*[stateList.length()];
 	for ( RedStateList::Iter st = stateList; st.lte(); st++, pos++ )
 		ptrList[pos] = st;
-	
+
 	MergeSort<RedStateAp*, CmpStateById> mergeSort;
 	mergeSort.sort( ptrList, stateList.length() );
 
@@ -219,7 +219,7 @@ void RedFsmAp::assignActionLocs()
 	for ( GenActionTableMap::Iter act = actionMap; act.lte(); act++ ) {
 		/* Store the loc, skip over the array and a null terminator. */
 		act->location = nextLocation;
-		nextLocation += act->key.length() + 1;		
+		nextLocation += act->key.length() + 1;
 	}
 }
 
@@ -265,7 +265,7 @@ void RedFsmAp::moveTransToSingle( RedStateAp *state )
 				single.append( range[rpos+1] );
 				range.remove( rpos+1 );
 			}
-			
+
 			/* Extend. */
 			range[rpos].highKey = range[rpos+1].highKey;
 			range.remove( rpos+1 );
@@ -306,7 +306,7 @@ void RedFsmAp::makeFlat()
 			unsigned long long span = keyOps->span( st->lowKey, st->highKey );
 			st->transList = new RedTransAp*[ span ];
 			memset( st->transList, 0, sizeof(RedTransAp*)*span );
-			
+
 			for ( RedTransList::Iter trans = st->outRange; trans.lte(); trans++ ) {
 				unsigned long long base, trSpan;
 				base = keyOps->span( st->lowKey, trans->lowKey )-1;
@@ -329,7 +329,7 @@ void RedFsmAp::makeFlat()
  * default pointer. */
 void RedFsmAp::moveToDefault( RedTransAp *defTrans, RedStateAp *state )
 {
-	/* Rewrite the outRange, omitting any ranges that use 
+	/* Rewrite the outRange, omitting any ranges that use
 	 * the picked default. */
 	RedTransList outRange;
 	for ( RedTransList::Iter rtel = state->outRange; rtel.lte(); rtel++ ) {
@@ -380,7 +380,7 @@ RedTransAp *RedFsmAp::chooseDefaultSpan( RedStateAp *state )
 	RedTransSet stateTransSet;
 	for ( RedTransList::Iter rtel = state->outRange; rtel.lte(); rtel++ )
 		stateTransSet.insert( rtel->value );
-	
+
 	/* For each transition in the find how many alphabet characters the
 	 * transition spans. */
 	unsigned long long *span = new unsigned long long[stateTransSet.length()];
@@ -459,7 +459,7 @@ RedTransAp *RedFsmAp::chooseDefaultNumRanges( RedStateAp *state )
 	RedTransSet stateTransSet;
 	for ( RedTransList::Iter rtel = state->outRange; rtel.lte(); rtel++ )
 		stateTransSet.insert( rtel->value );
-	
+
 	/* For each transition in the find how many ranges use the transition. */
 	int *numRanges = new int[stateTransSet.length()];
 	memset( numRanges, 0, sizeof(int) * stateTransSet.length() );

@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -38,14 +38,14 @@ void IpGoto::genAnalysis()
 
 	/* Choose default transitions and the single transition. */
 	redFsm->chooseDefaultSpan();
-		
+
 	/* Choose single. */
 	redFsm->chooseSingle();
 
 	/* If any errors have occured in the input file then don't write anything. */
 	if ( gblErrorCount > 0 )
 		return;
-	
+
 	redFsm->setInTrans();
 
 	/* Anlayze Machine will find the final action reference counts, among other
@@ -56,8 +56,8 @@ void IpGoto::genAnalysis()
 
 bool IpGoto::useAgainLabel()
 {
-	return redFsm->anyRegActionRets() || 
-			redFsm->anyRegActionByValControl() || 
+	return redFsm->anyRegActionRets() ||
+			redFsm->anyRegActionByValControl() ||
 			redFsm->anyRegNextStmt();
 }
 
@@ -83,7 +83,7 @@ void IpGoto::CALL( ostream &ret, int callDest, int targState, bool inFinish )
 		ret << "}$ ";
 	}
 
-	ret << STACK() << "[" << TOP() << "] = " << targState << 
+	ret << STACK() << "[" << TOP() << "] = " << targState <<
 			"; " << TOP() << "+= 1; " << "goto st" << callDest << ";}$";
 }
 
@@ -97,7 +97,7 @@ void IpGoto::NCALL( ostream &ret, int callDest, int targState, bool inFinish )
 		ret << "}$ ";
 	}
 
-	ret << STACK() << "[" << TOP() << "] = " << targState << 
+	ret << STACK() << "[" << TOP() << "] = " << targState <<
 			"; " << TOP() << "+= 1; " << vCS() << " = " << callDest << "; }$";
 }
 
@@ -191,7 +191,7 @@ void IpGoto::BREAK( ostream &ret, int targState, bool csForced )
 {
 	outLabelUsed = true;
 	ret << "{" << P() << "+= 1; ";
-	if ( !csForced ) 
+	if ( !csForced )
 		ret << vCS() << " = " << targState << "; ";
 	ret << "goto _out;}";
 }
@@ -200,7 +200,7 @@ void IpGoto::NBREAK( ostream &ret, int targState, bool csForced )
 {
 	outLabelUsed = true;
 	ret << "{" << P() << "+= 1; ";
-	if ( !csForced ) 
+	if ( !csForced )
 		ret << vCS() << " = " << targState << "; ";
 	ret << "_nbreak = 1;}";
 }
@@ -230,7 +230,7 @@ bool IpGoto::IN_TRANS_ACTIONS( RedStateAp *state )
 
 			/* Write each action in the list. */
 			for ( GenActionTable::Iter item = trans->action->key; item.lte(); item++ ) {
-				ACTION( out, item->value, IlOpts( trans->targ->id, false, 
+				ACTION( out, item->value, IlOpts( trans->targ->id, false,
 						trans->action->anyNextStmt() ) );
 				out << "\n";
 			}
@@ -241,8 +241,8 @@ bool IpGoto::IN_TRANS_ACTIONS( RedStateAp *state )
 					"	goto _out;\n";
 				outLabelUsed = true;
 			}
-				
- 
+
+
 			/* If the action contains a next then we need to reload, otherwise
 			 * jump directly to the target state. */
 			if ( trans->action->anyNextStmt() )
@@ -262,13 +262,13 @@ void IpGoto::GOTO_HEADER( RedStateAp *state )
 {
 	IN_TRANS_ACTIONS( state );
 
-	if ( state->labelNeeded ) 
+	if ( state->labelNeeded )
 		out << "st" << state->id << ":\n";
 
 	if ( state->toStateAction != 0 ) {
 		/* Write every action in the list. */
 		for ( GenActionTable::Iter item = state->toStateAction->key; item.lte(); item++ ) {
-			ACTION( out, item->value, IlOpts( state->id, false, 
+			ACTION( out, item->value, IlOpts( state->id, false,
 					state->toStateAction->anyNextStmt() ) );
 			out << "\n";
 		}
@@ -283,7 +283,7 @@ void IpGoto::GOTO_HEADER( RedStateAp *state )
 				"		goto _test_eof" << state->id << ";\n";
 		}
 		else {
-			out << 
+			out <<
 				"	" << P() << " += 1;\n";
 		}
 	}
@@ -313,7 +313,7 @@ void IpGoto::STATE_GOTO_ERROR()
 	IN_TRANS_ACTIONS( state );
 
 	out << "st_case_" << state->id << ":\n";
-	if ( state->labelNeeded ) 
+	if ( state->labelNeeded )
 		out << "st" << state->id << ":\n";
 
 	/* Break out here. */
@@ -380,7 +380,7 @@ std::ostream &IpGoto::EXIT_STATES()
 	for ( RedStateList::Iter st = redFsm->stateList; st.lte(); st++ ) {
 		if ( st->outNeeded ) {
 			testEofUsed = true;
-			out << "	_test_eof" << st->id << ": " << vCS() << " = " << 
+			out << "	_test_eof" << st->id << ": " << vCS() << " = " <<
 					st->id << "; goto _test_eof; \n";
 		}
 	}
@@ -390,7 +390,7 @@ std::ostream &IpGoto::EXIT_STATES()
 std::ostream &IpGoto::AGAIN_CASES()
 {
 	for ( RedStateList::Iter st = redFsm->stateList; st.lte(); st++ ) {
-		out << 
+		out <<
 			"		case " << st->id << ": goto st" << st->id << ";\n";
 	}
 	return out;
@@ -550,13 +550,13 @@ void IpGoto::writeExec()
 
 	if ( !noEnd ) {
 		testEofUsed = true;
-		out << 
+		out <<
 			"	if ( " << P() << " == " << PE() << " )\n"
 			"		goto _test_eof;\n";
 	}
 
 	if ( useAgainLabel() ) {
-		out << 
+		out <<
 			"	goto _resume;\n"
 			"\n"
 			"_again:\n"
@@ -567,13 +567,13 @@ void IpGoto::writeExec()
 
 		if ( !noEnd ) {
 			testEofUsed = true;
-			out << 
+			out <<
 				"	" << P() << "+= 1;\n"
 				"	if ( " << P() << " == " << PE() << " )\n"
 				"		goto _test_eof;\n";
 		}
 		else {
-			out << 
+			out <<
 				"	" << P() << " += 1;\n";
 		}
 
@@ -591,7 +591,7 @@ void IpGoto::writeExec()
 		EXIT_STATES() <<
 		"\n";
 
-	if ( testEofUsed ) 
+	if ( testEofUsed )
 		out << "	_test_eof: {}\n";
 
 	if ( redFsm->anyEofTrans() || redFsm->anyEofActions() ) {
@@ -605,7 +605,7 @@ void IpGoto::writeExec()
 			"\n";
 	}
 
-	if ( outLabelUsed ) 
+	if ( outLabelUsed )
 		out << "	_out: {}\n";
 
 	out <<

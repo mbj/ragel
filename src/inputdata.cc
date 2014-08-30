@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "ragel.h"
@@ -150,7 +150,7 @@ void InputData::makeOutputStream()
 	/* Make sure we are not writing to the same file as the input file. */
 	if ( outputFileName != 0 ) {
 		if ( strcmp( inputFileName, outputFileName  ) == 0 ) {
-			error() << "output file \"" << outputFileName  << 
+			error() << "output file \"" << outputFileName  <<
 					"\" is the same as the input file" << endl;
 		}
 
@@ -189,7 +189,7 @@ void InputData::prepareSingleMachine()
 			error() << "could not locate machine specified with -S and/or -M" << endp;
 		dotGenParser = pdEl->value;
 	}
-	else { 
+	else {
 		/* No machine spec given, generate the first one. */
 		if ( parserList.length() == 0 )
 			error() << "no machine specification to generate graphviz output" << endp;
@@ -348,7 +348,7 @@ void InputData::processCode( bool generateDot, bool printStatistics )
 	writeOutput();
 	closeOutput();
 
-	string final = dirName + "/rlhc " + 
+	string final = dirName + "/rlhc " +
 			origOutputFileName + " " +
 			genOutputFileName + " " +
 			hostLang->rlhcArg;
@@ -391,7 +391,7 @@ void InputData::process()
 		processXML();
 	else if ( generateDot )
 		processDot();
-	else 
+	else
 		processCode( generateDot, printStatistics );
 
 	assert( gblErrorCount == 0 );

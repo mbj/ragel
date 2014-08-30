@@ -538,7 +538,7 @@ struct LoadRagel
 			inlineList = loadInlineBlock( ActionBlock.RubyInlineBlock() );
 
 		/* Add the action to the list of actions. */
-		Action *newAction = new Action( loc, name, 
+		Action *newAction = new Action( loc, name,
 				inlineList, pd->nextCondId++ );
 
 		/* Append to the action list. */
@@ -593,7 +593,7 @@ struct LoadRagel
 			pd->postPopExpr = loadInlineBlock( PostPopBlock.RubyInlineBlock() );
 	}
 
-	void tryMachineDef( InputLoc &loc, std::string name, 
+	void tryMachineDef( InputLoc &loc, std::string name,
 			MachineDef *machineDef, bool isInstance )
 	{
 		GraphDictEl *newEl = pd->graphDict.insert( name );
@@ -862,7 +862,7 @@ struct LoadRagel
 					factorWithRep = new FactorWithRep( loc, factorWithRep,
 							0, 0, FactorWithRep::StarType );
 					break;
-					
+
 				case ragel::factor_rep_op::_StarStar:
 					factorWithRep = new FactorWithRep( loc, factorWithRep,
 							0, 0, FactorWithRep::StarStarType );
@@ -883,7 +883,7 @@ struct LoadRagel
 				}
 				case ragel::factor_rep_op::_MaxRep: {
 					int rep = loadFactorRepNum( FactorRepOp.factor_rep_num() );
-					factorWithRep = new FactorWithRep( loc, factorWithRep, 
+					factorWithRep = new FactorWithRep( loc, factorWithRep,
 							0, rep, FactorWithRep::MaxType );
 					break;
 				}
@@ -896,7 +896,7 @@ struct LoadRagel
 				case ragel::factor_rep_op::_RangeRep: {
 					int low = loadFactorRepNum( FactorRepOp.LowRep() );
 					int high = loadFactorRepNum( FactorRepOp.HighRep() );
-					factorWithRep = new FactorWithRep( loc, factorWithRep, 
+					factorWithRep = new FactorWithRep( loc, factorWithRep,
 							low, high, FactorWithRep::RangeType );
 					break;
 				}
@@ -1157,13 +1157,13 @@ struct LoadRagel
 		long aug = strtol( data.c_str(), 0, 10 );
 		if ( errno == ERANGE && aug == LONG_MAX ) {
 			/* Priority number too large. Recover by setting the priority to 0. */
-			error(loc) << "priority number " << data << 
+			error(loc) << "priority number " << data <<
 					" overflows" << endl;
 			priorityNum = 0;
 		}
 		else if ( errno == ERANGE && aug == LONG_MIN ) {
 			/* Priority number too large in the neg. Recover by using 0. */
-			error(loc) << "priority number " << data << 
+			error(loc) << "priority number " << data <<
 					" underflows" << endl;
 			priorityNum = 0;
 		}
@@ -1213,7 +1213,7 @@ struct LoadRagel
 				factorWithAug = loadFactorAug( FactorAug._factor_aug() );
 				AugType augType = loadAugCond( FactorAug.aug_cond() );
 				Action *action = loadActionRef( FactorAug.action_ref() );
-				factorWithAug->conditions.append( ConditionTest( loc, 
+				factorWithAug->conditions.append( ConditionTest( loc,
 						augType, action, true ) );
 				break;
 			}
@@ -1221,7 +1221,7 @@ struct LoadRagel
 				factorWithAug = loadFactorAug( FactorAug._factor_aug() );
 				AugType augType = loadAugCond( FactorAug.aug_cond() );
 				Action *action = loadActionRef( FactorAug.action_ref() );
-				factorWithAug->conditions.append( ConditionTest( loc, 
+				factorWithAug->conditions.append( ConditionTest( loc,
 						augType, action, false ) );
 				break;
 			}
@@ -1229,7 +1229,7 @@ struct LoadRagel
 				factorWithAug = loadFactorAug( FactorAug._factor_aug() );
 				AugType augType = loadAugToState( FactorAug.aug_to_state() );
 				Action *action = loadActionRef( FactorAug.action_ref() );
-				factorWithAug->actions.append( ParserAction( loc, 
+				factorWithAug->actions.append( ParserAction( loc,
 						augType, 0, action ) );
 				break;
 			}
@@ -1237,7 +1237,7 @@ struct LoadRagel
 				factorWithAug = loadFactorAug( FactorAug._factor_aug() );
 				AugType augType = loadAugFromState( FactorAug.aug_from_state() );
 				Action *action = loadActionRef( FactorAug.action_ref() );
-				factorWithAug->actions.append( ParserAction( loc, 
+				factorWithAug->actions.append( ParserAction( loc,
 						augType, 0, action ) );
 				break;
 			}
@@ -1245,7 +1245,7 @@ struct LoadRagel
 				factorWithAug = loadFactorAug( FactorAug._factor_aug() );
 				AugType augType = loadAugEof( FactorAug.aug_eof() );
 				Action *action = loadActionRef( FactorAug.action_ref() );
-				factorWithAug->actions.append( ParserAction( loc, 
+				factorWithAug->actions.append( ParserAction( loc,
 						augType, 0, action ) );
 				break;
 			}
@@ -1253,7 +1253,7 @@ struct LoadRagel
 				factorWithAug = loadFactorAug( FactorAug._factor_aug() );
 				AugType augType = loadAugGblError( FactorAug.aug_gbl_error() );
 				Action *action = loadActionRef( FactorAug.action_ref() );
-				factorWithAug->actions.append( ParserAction( loc, 
+				factorWithAug->actions.append( ParserAction( loc,
 						augType, pd->curDefLocalErrKey, action ) );
 				break;
 			}
@@ -1261,7 +1261,7 @@ struct LoadRagel
 				factorWithAug = loadFactorAug( FactorAug._factor_aug() );
 				AugType augType = loadAugLocalError( FactorAug.aug_local_error() );
 				Action *action = loadActionRef( FactorAug.action_ref() );
-				factorWithAug->actions.append( ParserAction( loc, 
+				factorWithAug->actions.append( ParserAction( loc,
 						augType, pd->curDefLocalErrKey, action ) );
 				break;
 			}
@@ -1275,7 +1275,7 @@ struct LoadRagel
 				if ( pd->localErrDict.insert( errName, pd->nextLocalErrKey, &localErrDictEl ) )
 					pd->nextLocalErrKey += 1;
 
-				factorWithAug->actions.append( ParserAction( loc, 
+				factorWithAug->actions.append( ParserAction( loc,
 						augType, localErrDictEl->value, action ) );
 				break;
 			}
@@ -1315,7 +1315,7 @@ struct LoadRagel
 				factorWithAug->epsilonLinks.append( EpsilonLink( loc, nameRef ) );
 				break;
 			}
-				
+
 			case ragel::factor_ep::_Base:
 				factorWithAug = loadFactorAug( FactorEp.factor_aug() );
 				break;
@@ -1454,7 +1454,7 @@ struct LoadRagel
 				if ( action != 0 )
 					action->isLmAction = true;
 
-				longestMatchPart = new LongestMatchPart( join, action, 
+				longestMatchPart = new LongestMatchPart( join, action,
 						loc, pd->nextLongestMatchId++ );
 
 				/* Provide a location to join. Unfortunately We don't
@@ -1580,7 +1580,7 @@ struct LoadRagel
 		if ( machineDef->join != 0 )
 			machineDef->join->loc = loc;
 	}
-	
+
 
 	void loadWrite( ragel::word Cmd, ragel::_repeat_word WordList )
 	{
@@ -1623,7 +1623,7 @@ struct LoadRagel
 				string one = AlphTypeType.W1().text();
 				if ( ! pd->setAlphType( loc, hostLang, one.c_str() ) ) {
 					// Recover by ignoring the alphtype statement.
-					error(loc) << "\"" << one << 
+					error(loc) << "\"" << one <<
 							"\" is not a valid alphabet type" << endl;
 				}
 				break;
@@ -1634,7 +1634,7 @@ struct LoadRagel
 				string two = AlphTypeType.W2().text();
 				if ( ! pd->setAlphType( loc, hostLang, one.c_str(), two.c_str() ) ) {
 					// Recover by ignoring the alphtype statement.
-					error(loc) << "\"" << one << 
+					error(loc) << "\"" << one <<
 							"\" is not a valid alphabet type" << endl;
 				}
 				break;
@@ -1721,7 +1721,7 @@ struct LoadRagel
 		tryMachineDef( loc, name, machineDef, false );
 		machineDef->join->loc = loc;
 	}
-	
+
 	void loadImportList( _repeat_import ImportList )
 	{
 		while ( !ImportList.end() ) {

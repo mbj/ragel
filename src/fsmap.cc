@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include "fsmgraph.h"
@@ -389,7 +389,7 @@ void FsmAp::setErrorAction( StateAp *state, int ordering, Action *action )
 
 
 /* Give a target state for error transitions. */
-void FsmAp::setErrorTarget( StateAp *state, StateAp *target, int *orderings, 
+void FsmAp::setErrorTarget( StateAp *state, StateAp *target, int *orderings,
 			Action **actions, int nActs )
 {
 	/* Fill any gaps in the out list with an error transition. */
@@ -410,7 +410,7 @@ void FsmAp::setErrorTarget( StateAp *state, StateAp *target, int *orderings,
 void FsmAp::transferOutActions( StateAp *state )
 {
 	for ( ActionTable::Iter act = state->outActionTable; act.lte(); act++ )
-		state->eofActionTable.setAction( act->key, act->value ); 
+		state->eofActionTable.setAction( act->key, act->value );
 	state->outActionTable.empty();
 }
 
@@ -591,7 +591,7 @@ void FsmAp::middleToStateAction( int ordering, Action *action )
 	}
 }
 
-/* 
+/*
  * Set From State Actions.
  */
 
@@ -655,15 +655,15 @@ int FsmAp::shiftStartActionOrder( int fromOrder )
 			 * increasing values starting at fromOrder. */
 			int curFromOrder = fromOrder;
 			ActionTable::Iter action = cond->actionTable;
-			for ( ; action.lte(); action++ ) 
+			for ( ; action.lte(); action++ )
 				action->key = curFromOrder++;
-		
+
 			/* Keep track of the max number of orders used. */
 			if ( curFromOrder - fromOrder > maxUsed )
 				maxUsed = curFromOrder - fromOrder;
 		}
 	}
-	
+
 	return maxUsed;
 }
 
@@ -810,7 +810,7 @@ int FsmAp::compareTransData( TransAp *trans1, TransAp *trans2 )
 			break;
 		}
 		case ValPairIter<CondAp>::RangeOverlap: {
-			int compareRes = FsmAp::compareCondDataPtr( 
+			int compareRes = FsmAp::compareCondDataPtr(
 					outPair.s1Tel.trans, outPair.s2Tel.trans );
 			if ( compareRes != 0 )
 				return compareRes;
@@ -833,19 +833,19 @@ int FsmAp::compareTransData( TransAp *trans1, TransAp *trans2 )
 int FsmAp::compareCondData( CondAp *trans1, CondAp *trans2 )
 {
 	/* Compare the prior table. */
-	int cmpRes = CmpPriorTable::compare( trans1->priorTable, 
+	int cmpRes = CmpPriorTable::compare( trans1->priorTable,
 			trans2->priorTable );
 	if ( cmpRes != 0 )
 		return cmpRes;
 
 	/* Compare longest match action tables. */
-	cmpRes = CmpLmActionTable::compare(trans1->lmActionTable, 
+	cmpRes = CmpLmActionTable::compare(trans1->lmActionTable,
 			trans2->lmActionTable);
 	if ( cmpRes != 0 )
 		return cmpRes;
-	
+
 	/* Compare action tables. */
-	return CmpActionTable::compare(trans1->actionTable, 
+	return CmpActionTable::compare(trans1->actionTable,
 			trans2->actionTable);
 }
 
@@ -906,39 +906,39 @@ int FsmAp::compareStateData( const StateAp *state1, const StateAp *state2 )
 			compare( state1->outPriorTable, state2->outPriorTable );
 	if ( cmpRes != 0 )
 		return cmpRes;
-	
+
 	/* Test to state action tables. */
-	cmpRes = CmpActionTable::compare( state1->toStateActionTable, 
+	cmpRes = CmpActionTable::compare( state1->toStateActionTable,
 			state2->toStateActionTable );
 	if ( cmpRes != 0 )
 		return cmpRes;
 
 	/* Test from state action tables. */
-	cmpRes = CmpActionTable::compare( state1->fromStateActionTable, 
+	cmpRes = CmpActionTable::compare( state1->fromStateActionTable,
 			state2->fromStateActionTable );
 	if ( cmpRes != 0 )
 		return cmpRes;
 
 	/* Test out action tables. */
-	cmpRes = CmpActionTable::compare( state1->outActionTable, 
+	cmpRes = CmpActionTable::compare( state1->outActionTable,
 			state2->outActionTable );
 	if ( cmpRes != 0 )
 		return cmpRes;
 
 	/* Test out condition sets. */
-	cmpRes = CmpOutCondSet::compare( state1->outCondSet, 
+	cmpRes = CmpOutCondSet::compare( state1->outCondSet,
 			state2->outCondSet );
 	if ( cmpRes != 0 )
 		return cmpRes;
 
 	/* Test out error action tables. */
-	cmpRes = CmpErrActionTable::compare( state1->errActionTable, 
+	cmpRes = CmpErrActionTable::compare( state1->errActionTable,
 			state2->errActionTable );
 	if ( cmpRes != 0 )
 		return cmpRes;
 
 	/* Test eof action tables. */
-	return CmpActionTable::compare( state1->eofActionTable, 
+	return CmpActionTable::compare( state1->eofActionTable,
 			state2->eofActionTable );
 }
 
@@ -960,7 +960,7 @@ bool FsmAp::hasOutData( StateAp *state )
 			state->outPriorTable.length() > 0 );
 }
 
-/* 
+/*
  * Setting Conditions.
  */
 

@@ -8,15 +8,15 @@
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  Ragel is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with Ragel; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #include <string.h>
@@ -26,7 +26,7 @@
 #include <iostream>
 using namespace std;
 
-void FsmAp::attachToInList( StateAp *from, StateAp *to, 
+void FsmAp::attachToInList( StateAp *from, StateAp *to,
 		CondAp *&head, CondAp *trans )
 {
 	trans->ilnext = head;
@@ -47,28 +47,28 @@ void FsmAp::attachToInList( StateAp *from, StateAp *to,
 			if ( to->foreignInTrans == 0 )
 				stateList.append( misfitList.detach( to ) );
 		}
-		
+
 		to->foreignInTrans += 1;
 	}
 };
 
 /* Detach a transition from an inlist. The head of the inlist must be supplied. */
-void FsmAp::detachFromInList( StateAp *from, StateAp *to, 
+void FsmAp::detachFromInList( StateAp *from, StateAp *to,
 		CondAp *&head, CondAp *trans )
 {
 	/* Detach in the inTransList. */
-	if ( trans->ilprev == 0 ) 
-		head = trans->ilnext; 
+	if ( trans->ilprev == 0 )
+		head = trans->ilnext;
 	else
-		trans->ilprev->ilnext = trans->ilnext; 
+		trans->ilprev->ilnext = trans->ilnext;
 
 	if ( trans->ilnext != 0 )
-		trans->ilnext->ilprev = trans->ilprev; 
-	
+		trans->ilnext->ilprev = trans->ilprev;
+
 	/* Keep track of foreign transitions for from and to. */
 	if ( from != to ) {
 		to->foreignInTrans -= 1;
-		
+
 		if ( misfitAccounting ) {
 			/* If the number of foreign in transitions goes down to 0 then move it
 			 * from the main list to the misfit list. */
@@ -131,7 +131,7 @@ void FsmAp::attachTrans( StateAp *from, StateAp *to, TransAp *trans )
 {
 	cerr << "FIXME: " << __PRETTY_FUNCTION__ << endl;
 
-	assert( trans->condList.head->fromState == 0 && 
+	assert( trans->condList.head->fromState == 0 &&
 			trans->condList.head->toState == 0 );
 
 	trans->condList.head->fromState = from;
@@ -139,7 +139,7 @@ void FsmAp::attachTrans( StateAp *from, StateAp *to, TransAp *trans )
 
 	if ( to != 0 ) {
 		/* For now always attache the one and only condList element. */
-		attachToInList( from, to, to->inList.head, 
+		attachToInList( from, to, to->inList.head,
 				trans->condList.head );
 	}
 }
@@ -179,7 +179,7 @@ void FsmAp::detachTrans( StateAp *from, StateAp *to, TransAp *trans )
 {
 	cerr << "FIXME: " << __PRETTY_FUNCTION__ << endl;
 
-	assert( trans->condList.head->fromState == from && 
+	assert( trans->condList.head->fromState == from &&
 			trans->condList.head->toState == to );
 
 	trans->condList.head->fromState = 0;
@@ -275,7 +275,7 @@ TransAp *FsmAp::dupTrans( StateAp *from, TransAp *srcTrans )
 
 		/* We can attach the transition, one does not exist. */
 		attachTrans( from, sc->toState, newCond );
-			
+
 		/* Call the user callback to add in the original source transition. */
 		addInTrans( newCond, sc );
 	}
@@ -295,7 +295,7 @@ CondAp *FsmAp::dupCondTrans( StateAp *from, TransAp *destParent, CondAp *srcTran
 
 	/* We can attach the transition, one does not exist. */
 	attachTrans( from, srcTrans->toState, newCond );
-			
+
 	/* Call the user callback to add in the original source transition. */
 	addInTrans( newCond, srcTrans );
 
@@ -443,7 +443,7 @@ TransAp *FsmAp::copyTransForExpanision( StateAp *fromState, TransAp *srcTrans )
 		newCond->key = sc->key;
 
 		attachTrans( sc->fromState, sc->toState, newCond );
-			
+
 		/* Call the user callback to add in the original source transition. */
 		addInTrans( newCond, sc );
 
